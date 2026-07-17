@@ -1,0 +1,217 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Лето 2026</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☀️</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #e0e5ec; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+        .phone-frame { max-width: 375px; width: 100%; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 45px; padding: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.15); margin: 20px auto; height: 812px; position: relative; }
+        .screen { background: linear-gradient(180deg, #DDF4FF 0%, #A9E0F5 100%); border-radius: 35px; height: 100%; width: 100%; position: relative; display: flex; flex-direction: column; }
+        @media (max-width: 450px) {
+            .phone-frame { max-width: 100%; border: none; border-radius: 0; padding: 0; box-shadow: none; margin: 0; height: 100vh; background: transparent; backdrop-filter: none; }
+            .screen { border-radius: 0; height: 100vh; }
+        }
+
+        .cloud-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
+        .cloud { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.85; filter: blur(1.5px); }
+        .cloud-1 { width: 200px; height: 60px; top: 10%; left: -20px; box-shadow: 40px -30px 0 10px #fff, 90px -50px 0 30px #fff, 150px -20px 0 5px #fff; }
+        .cloud-2 { width: 240px; height: 50px; bottom: 20%; right: -30px; box-shadow: -40px -30px 0 15px #fff, -100px -50px 0 25px #fff, -160px -10px 0 10px #fff; }
+        .cloud-3 { width: 160px; height: 40px; top: 80%; left: 20px; box-shadow: -30px -20px 0 8px #fff, -80px -40px 0 15px #fff; opacity: 0.6; }
+
+        .content-wrapper { position: relative; z-index: 10; padding: 25px 20px 20px 20px; height: 100%; display: flex; flex-direction: column; }
+        .hero-logo { text-align: center; margin-bottom: 30px; flex-shrink: 0; }
+        .logo-title { font-size: 42px; line-height: 1; font-weight: 900; color: #1E3A5F; letter-spacing: -1px; text-shadow: 0 4px 15px rgba(255, 255, 255, 0.6); }
+
+        .events-list { display: flex; flex-direction: column; gap: 15px; flex: 1; overflow-y: auto; padding-right: 4px; min-height: 0; }
+        .events-list::-webkit-scrollbar { width: 4px; }
+        .events-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.5); border-radius: 10px; }
+
+        .event-item-link { display: block; text-decoration: none; color: inherit; }
+
+        .event-item {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 14px 16px;
+            border-radius: 18px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.45);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            transition: 0.2s;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        
+        @keyframes floatUp {
+            0% { opacity: 0; transform: translateY(20px) scale(0.98); }
+            100% { opacity: 1; transform: translateY(0px) scale(1); }
+        }
+        .event-item-link:nth-child(1) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s forwards; }
+        .event-item-link:nth-child(2) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
+        .event-item-link:nth-child(3) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s forwards; }
+        .event-item-link:nth-child(4) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
+        .event-item-link:nth-child(5) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s forwards; }
+        .event-item-link:nth-child(6) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards; }
+        .event-item-link:nth-child(7) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards; }
+
+        .event-item-link:active .event-item { transform: scale(0.96) !important; transition: 0.1s; }
+
+        .event-info h2 { font-size: 18px; font-weight: 800; color: #1E3A5F; letter-spacing: -0.5px; }
+        .event-info .meta { font-size: 11px; font-weight: 600; color: #5A7D9A; margin-top: 3px; }
+        .event-info .meta span { font-weight: 300; opacity: 0.7; margin: 0 4px; }
+
+        /* --- СТАТУСЫ --- */
+        .event-badge { border-radius: 50px; padding: 4px 14px; font-size: 11px; font-weight: 700; text-align: center; }
+        .event-badge.past { background: rgba(255, 255, 255, 0.4); color: #5A7D9A; border: 1px solid rgba(255,255,255,0.4); }
+        .event-badge.soon { background: #FF006F; color: #FFFFFF; box-shadow: 0 4px 15px rgba(255, 0, 111, 0.3); }
+        .event-badge.process {
+            background: #FF8C00; color: #FFFFFF; font-weight: 700;
+            box-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
+            animation: pulseProcess 1.5s ease-in-out infinite;
+        }
+        @keyframes pulseProcess {
+            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 140, 0, 0.4); }
+            50% { transform: scale(1.08); box-shadow: 0 0 25px rgba(255, 140, 0, 0.8); }
+            100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 140, 0, 0.4); }
+        }
+
+        .event-item-link.highlight .event-item {
+            border: 2px solid #FF8C00;
+            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
+            background: rgba(255, 255, 255, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <div class="screen">
+            <div class="cloud-container">
+                <div class="cloud cloud-1"></div>
+                <div class="cloud cloud-2"></div>
+                <div class="cloud cloud-3"></div>
+            </div>
+            <div class="content-wrapper">
+                <div class="hero-logo">
+                    <h1 class="logo-title">ЛЕТО<br>2026</h1>
+                </div>
+
+                <div class="events-list" id="eventList">
+
+                    <!-- 1. To Moscow (18.07) -->
+                    <a href="to-moscow-2026.html" class="event-item-link highlight" data-date="2026-07-18">
+                        <div class="event-item">
+                            <div class="event-info"><h2>To Moscow</h2><div class="meta">Поездка <span>|</span> 18.07.2026</div></div>
+                            <div class="event-badge">СКОРО</div>
+                        </div>
+                    </a>
+
+                    <!-- 2. ВК ФЕСТ 2026 (19.07) -->
+                    <a href="vk-fest-2026.html" class="event-item-link highlight" data-date="2026-07-19">
+                        <div class="event-item">
+                            <div class="event-info"><h2>ВК ФЕСТ 2026</h2><div class="meta">Фестиваль <span>|</span> 19.07.2026</div></div>
+                            <div class="event-badge">СКОРО</div>
+                        </div>
+                    </a>
+
+                    <!-- 3. Молодежный день (27.06) -->
+                    <a href="molodezhnyy-den.html" class="event-item-link" data-date="2026-06-27">
+                        <div class="event-item">
+                            <div class="event-info"><h2>Молодежный день</h2><div class="meta">Фестиваль <span>|</span> 27.06.2026</div></div>
+                            <div class="event-badge">ПРОШЛО</div>
+                        </div>
+                    </a>
+
+                    <!-- 4. Концерт Звери (16.05) -->
+                    <a href="concert-zveri.html" class="event-item-link" data-date="2026-05-16">
+                        <div class="event-item">
+                            <div class="event-info"><h2>Концерт Звери</h2><div class="meta">Концерт <span>|</span> 16.05.2026</div></div>
+                            <div class="event-badge">ПРОШЛО</div>
+                        </div>
+                    </a>
+
+                    <!-- 5. To Moscow #2 (26.04) -->
+                    <a href="to-moscow-2.html" class="event-item-link" data-date="2026-04-26">
+                        <div class="event-item">
+                            <div class="event-info"><h2>To Moscow #2</h2><div class="meta">Поездка <span>|</span> 26.04.2026</div></div>
+                            <div class="event-badge">ПРОШЛО</div>
+                        </div>
+                    </a>
+
+                    <!-- 6. Розыгрыш 8 марта (08.03) -->
+                    <a href="rozgrysh-8-marta.html" class="event-item-link" data-date="2026-03-08">
+                        <div class="event-item">
+                            <div class="event-info"><h2>Розыгрыш 8 марта</h2><div class="meta">Международный женский день <span>|</span> 08.03.2026</div></div>
+                            <div class="event-badge">ПРОШЛО</div>
+                        </div>
+                    </a>
+
+                    <!-- 7. Розыгрыш ДР (28.02) -->
+                    <a href="rozgrysh-dr.html" class="event-item-link" data-date="2026-02-28">
+                        <div class="event-item">
+                            <div class="event-info"><h2>Розыгрыш ДР</h2><div class="meta">День рождения <span>|</span> 28.02.2026</div></div>
+                            <div class="event-badge">ПРОШЛО</div>
+                        </div>
+                    </a>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Функция для получения московского времени (UTC+3)
+            function getMoscowDate() {
+                const now = new Date();
+                const moscowOffset = 3 * 60; // UTC+3 в минутах
+                const localOffset = now.getTimezoneOffset();
+                const moscowTime = new Date(now.getTime() + (moscowOffset + localOffset) * 60000);
+                return moscowTime;
+            }
+
+            // Получаем текущую дату в Москве (без времени)
+            const nowMSK = getMoscowDate();
+            nowMSK.setHours(0, 0, 0, 0); // Сбрасываем время на 00:00
+
+            // Проходим по всем карточкам мероприятий
+            document.querySelectorAll('.event-item-link').forEach(function(link) {
+                const dateStr = link.getAttribute('data-date');
+                if (!dateStr) return;
+
+                // Парсим дату мероприятия (в московском часовом поясе)
+                const parts = dateStr.split('-');
+                const eventDate = new Date(Date.UTC(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2])));
+                // Корректируем на московское время (UTC+3)
+                eventDate.setHours(0, 0, 0, 0);
+
+                // Находим бейдж внутри карточки
+                const badge = link.querySelector('.event-badge');
+                if (!badge) return;
+
+                // Сравниваем даты
+                if (eventDate.getTime() === nowMSK.getTime()) {
+                    // Дата сегодня -> В ПРОЦЕССЕ
+                    badge.textContent = 'В ПРОЦЕССЕ';
+                    badge.className = 'event-badge process';
+                    link.classList.add('highlight');
+                } else if (eventDate > nowMSK) {
+                    // Дата в будущем -> СКОРО
+                    badge.textContent = 'СКОРО';
+                    badge.className = 'event-badge soon';
+                    link.classList.add('highlight');
+                } else {
+                    // Дата в прошлом -> ПРОШЛО
+                    badge.textContent = 'ПРОШЛО';
+                    badge.className = 'event-badge past';
+                    link.classList.remove('highlight');
+                }
+            });
+        });
+    </script>

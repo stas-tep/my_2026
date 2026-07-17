@@ -1,0 +1,197 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Концерт Звери</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎸</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #e0e5ec; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+        .phone-frame { max-width: 375px; width: 100%; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 45px; padding: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.15); margin: 20px auto; height: 812px; position: relative; }
+        .screen { background: linear-gradient(180deg, #DDF4FF 0%, #A9E0F5 100%); border-radius: 35px; height: 100%; width: 100%; position: relative; display: flex; flex-direction: column; }
+        @media (max-width: 450px) {
+            .phone-frame { max-width: 100%; border: none; border-radius: 0; padding: 0; box-shadow: none; margin: 0; height: 100vh; background: transparent; backdrop-filter: none; }
+            .screen { border-radius: 0; height: 100vh; }
+        }
+
+        .cloud-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
+        .cloud { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.85; filter: blur(1.5px); }
+        .cloud-1 { width: 200px; height: 60px; top: 10%; left: -20px; box-shadow: 40px -30px 0 10px #fff, 90px -50px 0 30px #fff, 150px -20px 0 5px #fff; }
+        .cloud-2 { width: 240px; height: 50px; bottom: 20%; right: -30px; box-shadow: -40px -30px 0 15px #fff, -100px -50px 0 25px #fff, -160px -10px 0 10px #fff; }
+        .cloud-3 { width: 160px; height: 40px; top: 80%; left: 20px; box-shadow: -30px -20px 0 8px #fff, -80px -40px 0 15px #fff; opacity: 0.6; }
+
+        .content-wrapper { position: relative; z-index: 10; padding: 25px 20px 20px 20px; height: 100%; display: flex; flex-direction: column; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #1E3A5F; text-decoration: none; font-weight: 600; font-size: 15px; background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(8px); padding: 8px 18px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.5); align-self: flex-start; transition: 0.2s; }
+        .back-btn:active { transform: scale(0.95); }
+
+        .event-header { text-align: center; margin-bottom: 20px; flex-shrink: 0; }
+        .event-title { font-size: 28px; font-weight: 900; color: #8E44AD; line-height: 1.2; text-shadow: 0 2px 10px rgba(142, 68, 173, 0.2); }
+        .event-date { font-size: 14px; color: #5A7D9A; margin-top: 5px; font-weight: 600; }
+
+        .event-content { flex: 1; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 15px; }
+        .event-content::-webkit-scrollbar { width: 4px; }
+        .event-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.5); border-radius: 10px; }
+
+        .glass-card { background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.45); border-radius: 18px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .glass-card h3 { color: #1E3A5F; font-size: 18px; margin-bottom: 10px; }
+        .glass-card p { color: #5A7D9A; font-size: 14px; line-height: 1.6; }
+        
+        .track-list { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+        .track-item { background: rgba(142, 68, 173, 0.15); padding: 6px 14px; border-radius: 50px; color: #8E44AD; font-weight: 600; font-size: 13px; border: 1px solid rgba(142, 68, 173, 0.2); }
+
+        /* Видео - модальное окно */
+        .gallery-btn-container { display: flex; flex-direction: column; gap: 15px; margin-top: 5px; }
+        .video-item { display: flex; justify-content: space-between; align-items: center; background: rgba(255, 255, 255, 0.15); border-radius: 12px; padding: 10px 14px; border: 1px solid rgba(255,255,255,0.3); }
+        .video-item .label { font-weight: 600; color: #1E3A5F; font-size: 14px; }
+        .video-item .label small { font-weight: 400; color: #5A7D9A; font-size: 12px; display: block; margin-top: 2px; }
+        .btn-watch { display: inline-block; background: #FF006F; color: white; text-decoration: none; padding: 6px 16px; border-radius: 50px; font-weight: 700; font-size: 12px; box-shadow: 0 4px 10px rgba(255, 0, 111, 0.3); transition: 0.2s; cursor: pointer; }
+        .btn-watch:active { transform: scale(0.95); }
+
+        /* Модальное окно для просмотра видео */
+        .photo-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+        .photo-modal.show { display: flex; }
+        .photo-modal video, .photo-modal iframe {
+            max-width: 100%;
+            max-height: 80vh;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+            background: #000;
+        }
+        .photo-modal .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            color: white;
+            font-size: 40px;
+            font-weight: 300;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .photo-modal .hint {
+            color: rgba(255,255,255,0.6);
+            font-size: 12px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Модальное окно -->
+    <div id="mediaModal" class="photo-modal" onclick="closeModal()">
+        <button class="close-btn" onclick="closeModal()">✕</button>
+        <div id="modalContent"></div>
+        <div class="hint">Нажмите в любое место, чтобы закрыть</div>
+    </div>
+
+    <div class="phone-frame">
+        <div class="screen">
+            <div class="cloud-container">
+                <div class="cloud cloud-1"></div>
+                <div class="cloud cloud-2"></div>
+                <div class="cloud cloud-3"></div>
+            </div>
+            <div class="content-wrapper">
+                <a href="index.html" class="back-btn">← Назад к списку</a>
+                <div class="event-header">
+                    <h1 class="event-title">🎸 Концерт Звери</h1>
+                    <div class="event-date">Концерт | 16.05.2026</div>
+                </div>
+                <div class="event-content">
+                    <div class="glass-card">
+                        <h3>Как это было</h3>
+                        <p>
+                            Концерт начался ровно в 20:00 и длился целых 2 часа. Это был настоящий праздник музыки! 
+                            Звук, свет, атмосфера — всё было на высшем уровне. Я давно ждал этого концерта и 
+                            особенные эмоции получил от живого исполнения треков, которые крутил в наушниках каждый день.
+                        </p>
+                        <p>
+                            Группа отыграла шикарную программу — от старых хитов до новых треков. 
+                            Энергия из зала просто переполняла!
+                        </p>
+
+                        <!-- ЕСЛИ У ВАС ЕСТЬ СВОЙ ТЕКСТ ИЗ ВК, ВСТАВЬТЕ ЕГО СЮДА ВМЕСТО ЭТОГО АБЗАЦА: -->
+                        <!-- <p>Ваш текст из истории ВК...</p> -->
+                        
+                        <p>
+                            <i>Это была одна из лучших ночей в этом году. Спасибо «Зверям» за эту магию!</i>
+                        </p>
+                    </div>
+
+                    <div class="glass-card">
+                        <h3>🔥 Сет-лист (треки вечера)</h3>
+                        <div class="track-list">
+                            <span class="track-item">Танцуй</span>
+                            <span class="track-item">Капканы</span>
+                            <span class="track-item">Районы-кварталы</span>
+                            <span class="track-item">До скорой встречи</span>
+                            <span class="track-item">Всё, что тебя касается</span>
+                            <span class="track-item">Просто такая сильная любовь</span>
+                        </div>
+                    </div>
+
+                    <!-- Видео с кнопками СМОТРЕТЬ -->
+                    <div class="glass-card">
+                        <h3>📹 Видео с концерта</h3>
+                        <div class="gallery-btn-container">
+                            <div class="video-item">
+                                <div class="label">
+                                    🎬 Видео 1
+                                    <small>Запись с концерта</small>
+                                </div>
+                                <!-- ЗАМЕНИТЕ ССЫЛКУ НА ВАШЕ ВИДЕО -->
+                                <button class="btn-watch" onclick="openVideo('https://drive.google.com/file/d/1c_vjGtD3ehabBknm_heikYX5IOL-gb3G/view?usp=sharing')">СМОТРЕТЬ</button>
+                            </div>
+                            <div class="video-item">
+                                <div class="label">
+                                    🎬 Видео 2
+                                    <small>Ещё один момент</small>
+                                </div>
+                                <!-- ЗАМЕНИТЕ ССЫЛКУ НА ВАШЕ ВИДЕО -->
+                                <button class="btn-watch" onclick="openVideo('https://drive.google.com/file/d/1c_vjGtD3ehabBknm_heikYX5IOL-gb3G/view?usp=sharing')">СМОТРЕТЬ</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function openVideo(videoSrc) {
+            const modal = document.getElementById('mediaModal');
+            const content = document.getElementById('modalContent');
+            
+            // Проверяем, является ли ссылка видеофайлом или iframe
+            if (videoSrc.includes('drive.google.com')) {
+                // Вставляем iframe для Google Drive
+                content.innerHTML = `
+                    <iframe width="100%" height="350" src="${videoSrc}" frameborder="0" allowfullscreen></iframe>
+                `;
+            } else {
+                // Обычный тег видео
+                content.innerHTML = `
+                    <video src="${videoSrc}" controls autoplay style="width:100%; height:auto; border-radius:16px;"></video>
+                `;
+            }
+            modal.classList.add('show');
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('mediaModal');
+            modal.classList.remove('show');
+            document.getElementById('modalContent').innerHTML = '';
+        }
+    </script>
