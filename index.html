@@ -1,90 +1,468 @@
+<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Лето 2026</title>
-    
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☀️</text></svg>">
     <meta name="apple-mobile-web-app-capable" content="yes">
-
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { background: #e0e5ec; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-
-        .phone-frame { max-width: 375px; width: 100%; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 45px; padding: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.15); margin: 20px auto; height: 812px; position: relative; }
-        .screen { background: linear-gradient(180deg, #DDF4FF 0%, #A9E0F5 100%); border-radius: 35px; height: 100%; width: 100%; position: relative; display: flex; flex-direction: column; }
-        @media (max-width: 450px) {
-            .phone-frame { max-width: 100%; border: none; border-radius: 0; padding: 0; box-shadow: none; margin: 0; height: 100vh; background: transparent; backdrop-filter: none; }
-            .screen { border-radius: 0; height: 100vh; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #e0e5ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
         }
 
-        .cloud-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
-        .cloud { position: absolute; background: #ffffff; border-radius: 50%; opacity: 0.85; filter: blur(1.5px); }
-        .cloud-1 { width: 200px; height: 60px; top: 10%; left: -20px; box-shadow: 40px -30px 0 10px #fff, 90px -50px 0 30px #fff, 150px -20px 0 5px #fff; }
-        .cloud-2 { width: 240px; height: 50px; bottom: 20%; right: -30px; box-shadow: -40px -30px 0 15px #fff, -100px -50px 0 25px #fff, -160px -10px 0 10px #fff; }
-        .cloud-3 { width: 160px; height: 40px; top: 80%; left: 20px; box-shadow: -30px -20px 0 8px #fff, -80px -40px 0 15px #fff; opacity: 0.6; }
+        .phone-frame {
+            max-width: 375px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 45px;
+            padding: 12px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            margin: 20px auto;
+            height: 812px;
+            position: relative;
+        }
+        .screen {
+            background: linear-gradient(180deg, #DDF4FF 0%, #A9E0F5 100%);
+            border-radius: 35px;
+            height: 100%;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        @media (max-width: 450px) {
+            .phone-frame {
+                max-width: 100%;
+                border: none;
+                border-radius: 0;
+                padding: 0;
+                box-shadow: none;
+                margin: 0;
+                height: 100vh;
+                background: transparent;
+                backdrop-filter: none;
+            }
+            .screen {
+                border-radius: 0;
+                height: 100vh;
+            }
+        }
 
-        .content-wrapper { position: relative; z-index: 10; padding: 25px 20px 20px 20px; height: 100%; display: flex; flex-direction: column; }
-        .hero-logo { text-align: center; margin-bottom: 30px; flex-shrink: 0; }
-        .logo-title { font-size: 42px; line-height: 1; font-weight: 900; color: #1E3A5F; letter-spacing: -1px; text-shadow: 0 4px 15px rgba(255, 255, 255, 0.6); }
+        /* Облака */
+        .cloud-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: inherit;
+        }
+        .cloud {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            opacity: 0.85;
+            filter: blur(1.5px);
+        }
+        .cloud-1 {
+            width: 200px;
+            height: 60px;
+            top: 10%;
+            left: -20px;
+            box-shadow: 40px -30px 0 10px #fff, 90px -50px 0 30px #fff, 150px -20px 0 5px #fff;
+        }
+        .cloud-2 {
+            width: 240px;
+            height: 50px;
+            bottom: 20%;
+            right: -30px;
+            box-shadow: -40px -30px 0 15px #fff, -100px -50px 0 25px #fff, -160px -10px 0 10px #fff;
+        }
+        .cloud-3 {
+            width: 160px;
+            height: 40px;
+            top: 80%;
+            left: 20px;
+            box-shadow: -30px -20px 0 8px #fff, -80px -40px 0 15px #fff;
+            opacity: 0.6;
+        }
 
-        .events-list { display: flex; flex-direction: column; gap: 15px; flex: 1; overflow-y: auto; padding-right: 4px; min-height: 0; }
-        .events-list::-webkit-scrollbar { width: 4px; }
-        .events-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.5); border-radius: 10px; }
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            padding: 25px 20px 20px 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
 
-        .event-item-link { display: block; text-decoration: none; color: inherit; }
+        /* Шапка */
+        .hero-logo {
+            text-align: center;
+            margin-bottom: 18px;
+            flex-shrink: 0;
+        }
+        .logo-title {
+            font-size: 40px;
+            line-height: 1;
+            font-weight: 900;
+            color: #1E3A5F;
+            letter-spacing: -1px;
+            text-shadow: 0 4px 15px rgba(255, 255, 255, 0.6);
+        }
+        .logo-sub {
+            font-size: 13px;
+            color: #5A7D9A;
+            font-weight: 600;
+            margin-top: 2px;
+        }
 
-        .event-item {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 14px 16px;
-            border-radius: 18px;
+        /* Шкала прогресса — обновлённая */
+        .season-scale {
+            flex-shrink: 0;
+            margin-bottom: 18px;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.45);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
-            transition: 0.2s;
+            border-radius: 30px;
+            padding: 14px 18px 16px 18px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        .scale-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .scale-header .label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .scale-header .label.spring-label {
+            color: #66BB6A;
+        }
+        .scale-header .label.spring-label.active {
+            color: #2E7D32;
+            transform: scale(1.05);
+        }
+        .scale-header .label.summer-label {
+            color: #FFA726;
+        }
+        .scale-header .label.summer-label.active {
+            color: #E67E22;
+            transform: scale(1.05);
+        }
+        .scale-header .label .icon {
+            font-size: 16px;
+        }
+        .scale-header .season-indicator {
+            font-size: 11px;
+            font-weight: 700;
+            color: #1E3A5F;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 2px 12px;
+            border-radius: 20px;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+        .scale-header .season-indicator.active {
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .scale-track-wrap {
+            position: relative;
+            padding: 0 4px;
+        }
+        .scale-track {
+            position: relative;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.25);
+            border-radius: 10px;
+            overflow: visible;
+            cursor: pointer;
+            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+        }
+        .scale-track-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, rgba(102, 187, 106, 0.15), rgba(255, 167, 38, 0.15));
+        }
+        .scale-fill {
+            height: 100%;
+            width: 50%;
+            background: linear-gradient(90deg, #66BB6A, #FFA726);
+            border-radius: 10px;
+            transition: width 0.35s cubic-bezier(0.2, 0.9, 0.4, 1);
+            position: relative;
+            box-shadow: 0 1px 6px rgba(255, 167, 38, 0.2);
+        }
+
+        /* Круглый ползунок */
+        .scale-handle {
+            position: absolute;
+            top: 50%;
+            width: 24px;
+            height: 24px;
+            background: white;
+            border-radius: 50%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: left 0.35s cubic-bezier(0.2, 0.9, 0.4, 1);
+            pointer-events: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            z-index: 2;
+            border: 2px solid rgba(255, 255, 255, 0.8);
+        }
+        .scale-handle.spring-handle {
+            background: linear-gradient(135deg, #A5D6A7, #66BB6A);
+        }
+        .scale-handle.summer-handle {
+            background: linear-gradient(135deg, #FFE082, #FFA726);
+        }
+        .scale-handle.mixed-handle {
+            background: linear-gradient(135deg, #A5D6A7, #FFE082);
+        }
+
+        /* Метки под шкалой */
+        .scale-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 8px;
+            padding: 0 4px;
+        }
+        .scale-labels span {
+            font-size: 11px;
+            font-weight: 600;
+            color: #5A7D9A;
+            opacity: 0.5;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .scale-labels span.active {
+            opacity: 1;
+            color: #1E3A5F;
+            transform: scale(1.05);
+        }
+        .scale-labels span .dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            transition: all 0.3s;
+        }
+        .scale-labels span .dot.spring-dot {
+            background: #66BB6A;
+        }
+        .scale-labels span .dot.summer-dot {
+            background: #FFA726;
+        }
+        .scale-labels span.active .dot {
+            transform: scale(1.3);
+            box-shadow: 0 0 8px rgba(255, 167, 38, 0.3);
+        }
+
+        /* Счётчик */
+        .counter {
+            text-align: center;
+            font-size: 12px;
+            color: #5A7D9A;
+            font-weight: 600;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
+            padding: 4px 14px;
+            border-radius: 50px;
+            align-self: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Список событий */
+        .events-list {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding-bottom: 4px;
+        }
+        .events-list::-webkit-scrollbar {
+            width: 3px;
+        }
+        .events-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 10px;
+        }
+
+        .event-item-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .event-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: 0.15s;
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(12px);
+            border-left: 4px solid #66BB6A;
         }
-        
-        @keyframes floatUp {
-            0% { opacity: 0; transform: translateY(20px) scale(0.98); }
-            100% { opacity: 1; transform: translateY(0px) scale(1); }
+        .event-item.summer-card {
+            border-left-color: #FFA726;
+            background: rgba(255, 200, 0, 0.12);
         }
-        .event-item-link:nth-child(1) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.05s forwards; }
-        .event-item-link:nth-child(2) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.1s forwards; }
-        .event-item-link:nth-child(3) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.15s forwards; }
-        .event-item-link:nth-child(4) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.2s forwards; }
-        .event-item-link:nth-child(5) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.25s forwards; }
-        .event-item-link:nth-child(6) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.3s forwards; }
-        .event-item-link:nth-child(7) .event-item { animation: floatUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 0.35s forwards; }
+        .event-item.spring-card {
+            border-left-color: #66BB6A;
+            background: rgba(76, 175, 80, 0.10);
+        }
+        .event-item.neutral-card {
+            border-left-color: #90A4AE;
+            background: rgba(255, 255, 255, 0.15);
+        }
 
-        .event-item-link:active .event-item { transform: scale(0.96) !important; transition: 0.1s; }
+        .event-item-link:active .event-item {
+            transform: scale(0.96);
+            transition: 0.08s;
+        }
+        .event-item-link.show .event-item {
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
 
-        .event-info h2 { font-size: 18px; font-weight: 800; color: #1E3A5F; letter-spacing: -0.5px; }
-        .event-info .meta { font-size: 11px; font-weight: 600; color: #5A7D9A; margin-top: 3px; }
-        .event-info .meta span { font-weight: 300; opacity: 0.7; margin: 0 4px; }
+        .event-icon {
+            font-size: 26px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            opacity: 0.8;
+        }
 
-        /* --- СТАТУСЫ --- */
-        .event-badge { border-radius: 50px; padding: 4px 14px; font-size: 11px; font-weight: 700; text-align: center; }
-        .event-badge.past { background: rgba(255, 255, 255, 0.4); color: #5A7D9A; border: 1px solid rgba(255,255,255,0.4); }
-        .event-badge.soon { background: #FF006F; color: #FFFFFF; box-shadow: 0 4px 15px rgba(255, 0, 111, 0.3); }
+        .event-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .event-info h2 {
+            font-size: 17px;
+            font-weight: 800;
+            color: #1E3A5F;
+            letter-spacing: -0.3px;
+        }
+        .event-info .meta {
+            font-size: 11px;
+            font-weight: 600;
+            color: #5A7D9A;
+            margin-top: 2px;
+        }
+        .event-info .meta span {
+            font-weight: 300;
+            opacity: 0.6;
+            margin: 0 3px;
+        }
+
+        .event-badge {
+            border-radius: 50px;
+            padding: 3px 12px;
+            font-size: 10px;
+            font-weight: 700;
+            text-align: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-left: 8px;
+        }
+        .event-badge.past {
+            background: rgba(255, 255, 255, 0.4);
+            color: #5A7D9A;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .event-badge.soon {
+            background: #FF006F;
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(255, 0, 111, 0.25);
+        }
         .event-badge.process {
-            background: #FF8C00; color: #FFFFFF; font-weight: 700;
-            box-shadow: 0 0 15px rgba(255, 140, 0, 0.5);
-            animation: pulseProcess 1.5s ease-in-out infinite;
+            background: #FF8C00;
+            color: #FFFFFF;
+            animation: pulseProcess 1.8s ease-in-out infinite;
         }
         @keyframes pulseProcess {
-            0% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 140, 0, 0.4); }
-            50% { transform: scale(1.08); box-shadow: 0 0 25px rgba(255, 140, 0, 0.8); }
-            100% { transform: scale(1); box-shadow: 0 0 10px rgba(255, 140, 0, 0.4); }
+            0% {
+                transform: scale(1);
+                box-shadow: 0 0 8px rgba(255, 140, 0, 0.4);
+            }
+            50% {
+                transform: scale(1.06);
+                box-shadow: 0 0 20px rgba(255, 140, 0, 0.7);
+            }
+            100% {
+                transform: scale(1);
+                box-shadow: 0 0 8px rgba(255, 140, 0, 0.4);
+            }
         }
 
-        .event-item-link.highlight .event-item {
-            border: 2px solid #FF8C00;
-            box-shadow: 0 0 20px rgba(255, 140, 0, 0.3);
-            background: rgba(255, 255, 255, 0.3);
+        @media (max-width: 380px) {
+            .logo-title {
+                font-size: 32px;
+            }
+            .event-info h2 {
+                font-size: 15px;
+            }
+            .event-item {
+                padding: 10px 14px;
+            }
+            .event-icon {
+                font-size: 22px;
+                margin-right: 8px;
+            }
+            .scale-header .label {
+                font-size: 10px;
+            }
+            .scale-handle {
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+            }
         }
     </style>
 </head>
@@ -97,121 +475,281 @@
                 <div class="cloud cloud-2"></div>
                 <div class="cloud cloud-3"></div>
             </div>
+
             <div class="content-wrapper">
+                <!-- Шапка -->
                 <div class="hero-logo">
-                    <h1 class="logo-title">ЛЕТО<br>2026</h1>
+                    <h1 class="logo-title">ЛЕТО 2026</h1>
+                    <div class="logo-sub">☀️ Сезон отпусков</div>
                 </div>
 
-                <div class="events-list" id="eventList">
-
-                    <!-- 1. To Moscow (18.07) -->
-                    <a href="to-moscow-2026.html" class="event-item-link highlight" data-date="2026-07-18">
-                        <div class="event-item">
-                            <div class="event-info"><h2>To Moscow</h2><div class="meta">Поездка <span>|</span> 18.07.2026</div></div>
-                            <div class="event-badge">СКОРО</div>
+                <!-- Шкала прогресса — обновлённая -->
+                <div class="season-scale">
+                    <div class="scale-header">
+                        <div class="label spring-label active" id="springLabel">
+                            <span class="icon">🌸</span> Весна
                         </div>
-                    </a>
-
-                    <!-- 2. ВК ФЕСТ 2026 (19.07) -->
-                    <a href="vk-fest-2026.html" class="event-item-link highlight" data-date="2026-07-19">
-                        <div class="event-item">
-                            <div class="event-info"><h2>ВК ФЕСТ 2026</h2><div class="meta">Фестиваль <span>|</span> 19.07.2026</div></div>
-                            <div class="event-badge">СКОРО</div>
+                        <div class="season-indicator" id="seasonIndicator">🌿 Все события</div>
+                        <div class="label summer-label" id="summerLabel">
+                            Лето <span class="icon">☀️</span>
                         </div>
-                    </a>
+                    </div>
 
-                    <!-- 3. Молодежный день (27.06) -->
-                    <a href="molodezhnyy-den.html" class="event-item-link" data-date="2026-06-27">
-                        <div class="event-item">
-                            <div class="event-info"><h2>Молодежный день</h2><div class="meta">Фестиваль <span>|</span> 27.06.2026</div></div>
-                            <div class="event-badge">ПРОШЛО</div>
+                    <div class="scale-track-wrap">
+                        <div class="scale-track" id="scaleTrack">
+                            <div class="scale-track-bg"></div>
+                            <div class="scale-fill" id="scaleFill"></div>
+                            <div class="scale-handle mixed-handle" id="scaleHandle">🌿</div>
                         </div>
-                    </a>
+                    </div>
 
-                    <!-- 4. Концерт Звери (16.05) -->
-                    <a href="concert-zveri.html" class="event-item-link" data-date="2026-05-16">
-                        <div class="event-item">
-                            <div class="event-info"><h2>Концерт Звери</h2><div class="meta">Концерт <span>|</span> 16.05.2026</div></div>
-                            <div class="event-badge">ПРОШЛО</div>
-                        </div>
-                    </a>
-
-                    <!-- 5. To Moscow #2 (26.04) -->
-                    <a href="to-moscow-2.html" class="event-item-link" data-date="2026-04-26">
-                        <div class="event-item">
-                            <div class="event-info"><h2>To Moscow #2</h2><div class="meta">Поездка <span>|</span> 26.04.2026</div></div>
-                            <div class="event-badge">ПРОШЛО</div>
-                        </div>
-                    </a>
-
-                    <!-- 6. Розыгрыш 8 марта (08.03) -->
-                    <a href="rozgrysh-8-marta.html" class="event-item-link" data-date="2026-03-08">
-                        <div class="event-item">
-                            <div class="event-info"><h2>Розыгрыш 8 марта</h2><div class="meta">Международный женский день <span>|</span> 08.03.2026</div></div>
-                            <div class="event-badge">ПРОШЛО</div>
-                        </div>
-                    </a>
-
-                    <!-- 7. Розыгрыш ДР (28.02) -->
-                    <a href="rozgrysh-dr.html" class="event-item-link" data-date="2026-02-28">
-                        <div class="event-item">
-                            <div class="event-info"><h2>Розыгрыш ДР</h2><div class="meta">День рождения <span>|</span> 28.02.2026</div></div>
-                            <div class="event-badge">ПРОШЛО</div>
-                        </div>
-                    </a>
-
+                    <div class="scale-labels">
+                        <span class="active" id="labelSpring">
+                            <span class="dot spring-dot"></span> Весна
+                        </span>
+                        <span id="labelAll">
+                            <span class="dot" style="background:linear-gradient(90deg,#66BB6A,#FFA726);"></span> Все
+                        </span>
+                        <span id="labelSummer">
+                            Лето <span class="dot summer-dot"></span>
+                        </span>
+                    </div>
                 </div>
+
+                <!-- Счётчик -->
+                <div class="counter" id="counter">🌿 7 событий</div>
+
+                <!-- Список событий -->
+                <div class="events-list" id="eventList"></div>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            // Функция для получения московского времени (UTC+3)
-            function getMoscowDate() {
-                const now = new Date();
-                const moscowOffset = 3 * 60; // UTC+3 в минутах
-                const localOffset = now.getTimezoneOffset();
-                const moscowTime = new Date(now.getTime() + (moscowOffset + localOffset) * 60000);
-                return moscowTime;
+        // ---------- ДАННЫЕ СОБЫТИЙ ----------
+        const eventsData = [
+            { id: 'to-moscow-2026', title: 'To Moscow', date: '18.07.2026', type: 'Поездка', rawDate: '2026-07-18',
+                icon: '🏙️', season: 'summer' },
+            { id: 'vk-fest-2026', title: 'ВК ФЕСТ 2026', date: '19.07.2026', type: 'Фестиваль', rawDate: '2026-07-19',
+                icon: '🎤', season: 'summer' },
+            { id: 'molodezhnyy-den', title: 'Молодежный день', date: '27.06.2026', type: 'Фестиваль', rawDate: '2026-06-27',
+                icon: '🎉', season: 'summer' },
+            { id: 'concert-zveri', title: 'Концерт Звери', date: '16.05.2026', type: 'Концерт', rawDate: '2026-05-16',
+                icon: '🎸', season: 'spring' },
+            { id: 'to-moscow-2', title: 'To Moscow #2', date: '26.04.2026', type: 'Поездка', rawDate: '2026-04-26',
+                icon: '🏙️', season: 'spring' },
+            { id: 'rozgrysh-8-marta', title: 'Розыгрыш 8 марта', date: '08.03.2026', type: '8 марта', rawDate: '2026-03-08',
+                icon: '🌸', season: 'spring' },
+            { id: 'rozgrysh-dr', title: 'Розыгрыш ДР', date: '28.02.2026', type: 'День рождения', rawDate: '2026-02-28',
+                icon: '🎂', season: 'spring' }
+        ];
+
+        // ---------- СОРТИРОВКА ----------
+        function sortEvents(events) {
+            return [...events].sort((a, b) => {
+                const da = new Date(a.rawDate);
+                const db = new Date(b.rawDate);
+                return db - da;
+            });
+        }
+
+        // ---------- СТАТУС ----------
+        function getMoscowDate() {
+            const now = new Date();
+            const moscowOffset = 3 * 60;
+            const localOffset = now.getTimezoneOffset();
+            return new Date(now.getTime() + (moscowOffset + localOffset) * 60000);
+        }
+
+        function getEventStatus(rawDate) {
+            const now = getMoscowDate();
+            now.setHours(0, 0, 0, 0);
+            const parts = rawDate.split('-');
+            const eventDate = new Date(Date.UTC(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2])));
+            eventDate.setHours(0, 0, 0, 0);
+
+            if (eventDate.getTime() === now.getTime()) return 'process';
+            if (eventDate > now) return 'soon';
+            return 'past';
+        }
+
+        // ---------- РЕНДЕР СПИСКА ----------
+        const listEl = document.getElementById('eventList');
+        const counterEl = document.getElementById('counter');
+
+        function renderEvents(mode) {
+            let filtered;
+            if (mode === 'all') {
+                filtered = eventsData;
+            } else {
+                filtered = eventsData.filter(e => e.season === mode);
+            }
+            const sorted = sortEvents(filtered);
+
+            listEl.innerHTML = '';
+            if (sorted.length === 0) {
+                listEl.innerHTML =
+                    `<div style="text-align:center;color:#5A7D9A;font-size:14px;padding:30px 0;">Нет событий в этом сезоне</div>`;
+                counterEl.textContent = `🌿 0 событий`;
+                return;
             }
 
-            // Получаем текущую дату в Москве (без времени)
-            const nowMSK = getMoscowDate();
-            nowMSK.setHours(0, 0, 0, 0); // Сбрасываем время на 00:00
+            sorted.forEach((ev, index) => {
+                const status = getEventStatus(ev.rawDate);
+                let badgeText = 'ПРОШЛО';
+                let badgeClass = 'past';
+                if (status === 'soon') { badgeText = 'СКОРО';
+                    badgeClass = 'soon'; } else if (status === 'process') { badgeText = 'В ПРОЦЕССЕ';
+                    badgeClass = 'process'; }
 
-            // Проходим по всем карточкам мероприятий
-            document.querySelectorAll('.event-item-link').forEach(function(link) {
-                const dateStr = link.getAttribute('data-date');
-                if (!dateStr) return;
+                const link = document.createElement('a');
+                link.href = ev.id + '.html';
+                link.className = 'event-item-link show';
 
-                // Парсим дату мероприятия (в московском часовом поясе)
-                const parts = dateStr.split('-');
-                const eventDate = new Date(Date.UTC(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2])));
-                // Корректируем на московское время (UTC+3)
-                eventDate.setHours(0, 0, 0, 0);
-
-                // Находим бейдж внутри карточки
-                const badge = link.querySelector('.event-badge');
-                if (!badge) return;
-
-                // Сравниваем даты
-                if (eventDate.getTime() === nowMSK.getTime()) {
-                    // Дата сегодня -> В ПРОЦЕССЕ
-                    badge.textContent = 'В ПРОЦЕССЕ';
-                    badge.className = 'event-badge process';
-                    link.classList.add('highlight');
-                } else if (eventDate > nowMSK) {
-                    // Дата в будущем -> СКОРО
-                    badge.textContent = 'СКОРО';
-                    badge.className = 'event-badge soon';
-                    link.classList.add('highlight');
-                } else {
-                    // Дата в прошлом -> ПРОШЛО
-                    badge.textContent = 'ПРОШЛО';
-                    badge.className = 'event-badge past';
-                    link.classList.remove('highlight');
+                const item = document.createElement('div');
+                let cardClass = 'neutral-card';
+                if (mode === 'spring' || ev.season === 'spring') cardClass = 'spring-card';
+                if (mode === 'summer' || ev.season === 'summer') cardClass = 'summer-card';
+                if (mode === 'all') {
+                    cardClass = ev.season === 'spring' ? 'spring-card' : 'summer-card';
                 }
+                item.className = `event-item ${cardClass}`;
+                item.style.transitionDelay = (index * 0.05) + 's';
+
+                item.innerHTML = `
+                        <div class="event-icon">${ev.icon}</div>
+                        <div class="event-info">
+                            <h2>${ev.title}</h2>
+                            <div class="meta">${ev.type} <span>|</span> ${ev.date}</div>
+                        </div>
+                        <div class="event-badge ${badgeClass}">${badgeText}</div>
+                    `;
+
+                link.appendChild(item);
+                listEl.appendChild(link);
             });
+
+            counterEl.textContent = `🌿 ${sorted.length} событий`;
+        }
+
+        // ---------- ШКАЛА ПРОГРЕССА ----------
+        const scaleFill = document.getElementById('scaleFill');
+        const scaleTrack = document.getElementById('scaleTrack');
+        const scaleHandle = document.getElementById('scaleHandle');
+        const springLabel = document.getElementById('springLabel');
+        const summerLabel = document.getElementById('summerLabel');
+        const labelSpring = document.getElementById('labelSpring');
+        const labelSummer = document.getElementById('labelSummer');
+        const labelAll = document.getElementById('labelAll');
+        const seasonIndicator = document.getElementById('seasonIndicator');
+
+        let currentMode = 'all';
+        let currentValue = 0.5;
+
+        function updateScale(value) {
+            currentValue = Math.max(0, Math.min(1, value));
+            const percent = currentValue * 100;
+            scaleFill.style.width = percent + '%';
+            scaleHandle.style.left = percent + '%';
+
+            // Обновляем иконку и цвет ползунка
+            if (currentValue < 0.25) {
+                scaleHandle.className = 'scale-handle spring-handle';
+                scaleHandle.textContent = '🌸';
+                seasonIndicator.textContent = '🌸 Весна';
+                seasonIndicator.className = 'season-indicator active';
+                springLabel.classList.add('active');
+                summerLabel.classList.remove('active');
+                labelSpring.classList.add('active');
+                labelAll.classList.remove('active');
+                labelSummer.classList.remove('active');
+                currentMode = 'spring';
+            } else if (currentValue > 0.75) {
+                scaleHandle.className = 'scale-handle summer-handle';
+                scaleHandle.textContent = '☀️';
+                seasonIndicator.textContent = '☀️ Лето';
+                seasonIndicator.className = 'season-indicator active';
+                springLabel.classList.remove('active');
+                summerLabel.classList.add('active');
+                labelSpring.classList.remove('active');
+                labelAll.classList.remove('active');
+                labelSummer.classList.add('active');
+                currentMode = 'summer';
+            } else {
+                scaleHandle.className = 'scale-handle mixed-handle';
+                scaleHandle.textContent = '🌿';
+                seasonIndicator.textContent = '🌿 Все события';
+                seasonIndicator.className = 'season-indicator active';
+                springLabel.classList.remove('active');
+                summerLabel.classList.remove('active');
+                labelSpring.classList.remove('active');
+                labelAll.classList.add('active');
+                labelSummer.classList.remove('active');
+                currentMode = 'all';
+            }
+
+            renderEvents(currentMode);
+        }
+
+        // ---------- ВЗАИМОДЕЙСТВИЕ С ШКАЛОЙ ----------
+        let isDraggingScale = false;
+
+        function getScaleValue(clientX) {
+            const rect = scaleTrack.getBoundingClientRect();
+            const x = clientX - rect.left;
+            return Math.max(0, Math.min(1, x / rect.width));
+        }
+
+        function onScaleStart(e) {
+            e.preventDefault();
+            isDraggingScale = true;
+            const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
+            const value = getScaleValue(clientX);
+            updateScale(value);
+        }
+
+        function onScaleMove(e) {
+            if (!isDraggingScale) return;
+            e.preventDefault();
+            const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
+            const value = getScaleValue(clientX);
+            updateScale(value);
+        }
+
+        function onScaleEnd(e) {
+            if (!isDraggingScale) return;
+            isDraggingScale = false;
+            // Доводим до ближайшего состояния
+            const target = currentValue < 0.25 ? 0 : (currentValue > 0.75 ? 1 : 0.5);
+            updateScale(target);
+        }
+
+        function onScaleClick(e) {
+            if (isDraggingScale) return;
+            const clientX = e.clientX;
+            const value = getScaleValue(clientX);
+            const target = value < 0.25 ? 0 : (value > 0.75 ? 1 : 0.5);
+            updateScale(target);
+        }
+
+        scaleTrack.addEventListener('mousedown', onScaleStart);
+        document.addEventListener('mousemove', onScaleMove);
+        document.addEventListener('mouseup', onScaleEnd);
+
+        scaleTrack.addEventListener('touchstart', onScaleStart, { passive: false });
+        document.addEventListener('touchmove', onScaleMove, { passive: false });
+        document.addEventListener('touchend', onScaleEnd, { passive: false });
+
+        scaleTrack.addEventListener('click', onScaleClick);
+
+        // ---------- ИНИЦИАЛИЗАЦИЯ ----------
+        updateScale(0.5);
+
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                updateScale(currentValue);
+            }, 100);
         });
     </script>
