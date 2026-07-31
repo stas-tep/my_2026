@@ -1,0 +1,151 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Розыгрыш ДР</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #e0e5ec; display: flex; justify-content: center; align-items: center; min-height: 100vh; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+
+        .phone-frame { max-width: 375px; width: 100%; background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(5px); border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 45px; padding: 12px; box-shadow: 0 30px 60px rgba(0,0,0,0.15); margin: 20px auto; height: 812px; position: relative; }
+        .screen { background: linear-gradient(180deg, #87CEEB 0%, #B5E8F7 30%, #F0F8FF 60%, #FFF5E6 100%); border-radius: 35px; height: 100%; width: 100%; position: relative; display: flex; flex-direction: column; overflow: hidden; }
+        @media (max-width: 450px) {
+            .phone-frame { max-width: 100%; border: none; border-radius: 0; padding: 0; box-shadow: none; margin: 0; height: 100vh; background: transparent; backdrop-filter: none; }
+            .screen { border-radius: 0; height: 100vh; }
+        }
+
+        .spring-branches {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .branch {
+            position: absolute;
+            font-size: 32px;
+            opacity: 0.3;
+            animation: swayBranch 8s ease-in-out infinite;
+            transform-origin: bottom;
+        }
+        .branch:nth-child(1) { top: -5%; left: -10%; font-size: 50px; animation-delay: 0s; transform: rotate(-10deg); }
+        .branch:nth-child(2) { top: -3%; right: -8%; font-size: 45px; animation-delay: 1.5s; transform: rotate(10deg); }
+        .branch:nth-child(3) { top: 15%; left: 2%; font-size: 35px; animation-delay: 3s; }
+        .branch:nth-child(4) { top: 20%; right: 0%; font-size: 40px; animation-delay: 4.5s; transform: rotate(5deg); }
+        .branch:nth-child(5) { top: 40%; left: -5%; font-size: 30px; animation-delay: 2s; }
+        .branch:nth-child(6) { top: 50%; right: -3%; font-size: 35px; animation-delay: 3.5s; transform: rotate(-5deg); }
+
+        @keyframes swayBranch {
+            0%, 100% { transform: rotate(-5deg) scale(1); }
+            50% { transform: rotate(5deg) scale(1.05); }
+        }
+
+        .petal {
+            position: absolute;
+            font-size: 16px;
+            opacity: 0.35;
+            animation: fallPetal 10s linear infinite;
+        }
+        .petal:nth-child(7) { top: -5%; left: 10%; animation-delay: 0s; font-size: 18px; }
+        .petal:nth-child(8) { top: -8%; left: 30%; animation-delay: 2s; font-size: 14px; }
+        .petal:nth-child(9) { top: -3%; left: 55%; animation-delay: 4s; font-size: 20px; }
+        .petal:nth-child(10) { top: -10%; left: 75%; animation-delay: 1s; font-size: 16px; }
+        .petal:nth-child(11) { top: -5%; left: 90%; animation-delay: 3s; font-size: 14px; }
+        .petal:nth-child(12) { top: -15%; left: 45%; animation-delay: 5s; font-size: 18px; }
+        .petal:nth-child(13) { top: -7%; left: 20%; animation-delay: 2.5s; font-size: 15px; }
+        .petal:nth-child(14) { top: -12%; left: 65%; animation-delay: 4.5s; font-size: 17px; }
+        .petal:nth-child(15) { top: -3%; left: 85%; animation-delay: 1.5s; font-size: 13px; }
+        .petal:nth-child(16) { top: -6%; left: 40%; animation-delay: 3.5s; font-size: 19px; }
+
+        @keyframes fallPetal {
+            0% { transform: translateY(-20px) rotate(0deg) scale(1); opacity: 0.35; }
+            50% { transform: translateY(450px) rotate(180deg) scale(0.8); opacity: 0.5; }
+            100% { transform: translateY(900px) rotate(360deg) scale(0.6); opacity: 0; }
+        }
+
+        .cloud-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; overflow: hidden; border-radius: inherit; }
+        .cloud { position: absolute; background: rgba(255, 255, 255, 0.7); border-radius: 50%; filter: blur(2px); }
+        .cloud-1 { width: 200px; height: 60px; top: 8%; left: -20px; box-shadow: 40px -30px 0 10px rgba(255,255,255,0.7), 90px -50px 0 30px rgba(255,255,255,0.7), 150px -20px 0 5px rgba(255,255,255,0.7); }
+        .cloud-2 { width: 180px; height: 45px; top: 20%; right: -10px; box-shadow: -30px -25px 0 12px rgba(255,255,255,0.6), -80px -40px 0 20px rgba(255,255,255,0.6); }
+        .cloud-3 { width: 150px; height: 35px; top: 45%; left: 15%; box-shadow: -20px -20px 0 8px rgba(255,255,255,0.5); opacity: 0.5; }
+
+        .content-wrapper { position: relative; z-index: 10; padding: 25px 20px 20px 20px; height: 100%; display: flex; flex-direction: column; }
+        .back-btn { display: inline-block; margin-bottom: 20px; color: #1E3A5F; text-decoration: none; font-weight: 600; font-size: 15px; background: rgba(255, 255, 255, 0.4); backdrop-filter: blur(8px); padding: 8px 18px; border-radius: 50px; border: 1px solid rgba(255, 255, 255, 0.6); align-self: flex-start; transition: 0.2s; }
+        .back-btn:active { transform: scale(0.95); }
+
+        .event-header { text-align: center; margin-bottom: 20px; flex-shrink: 0; }
+        .event-title { font-size: 28px; font-weight: 900; color: #E6A200; line-height: 1.2; text-shadow: 0 2px 8px rgba(230, 162, 0, 0.2); }
+        .event-date { font-size: 14px; color: #4A6A7A; margin-top: 5px; font-weight: 600; }
+
+        .event-content { flex: 1; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 15px; }
+        .event-content::-webkit-scrollbar { width: 4px; }
+        .event-content::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.5); border-radius: 10px; }
+
+        .glass-card { background: rgba(255, 255, 255, 0.3); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.5); border-radius: 18px; padding: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .glass-card h3 { color: #2C3E50; font-size: 18px; margin-bottom: 10px; }
+        .glass-card p { color: #34495E; font-size: 14px; line-height: 1.6; }
+        
+        .steps { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+        .step-item { background: rgba(255, 215, 0, 0.12); padding: 10px 12px; border-radius: 12px; border-left: 3px solid #E6A200; color: #2C3E50; font-weight: 600; font-size: 14px; }
+        .step-item span { color: #5A7D9A; font-weight: 400; }
+    </style>
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen">
+            <div class="spring-branches">
+                <div class="branch">🌸</div>
+                <div class="branch">🌺</div>
+                <div class="branch">🌸</div>
+                <div class="branch">🌺</div>
+                <div class="branch">🌸</div>
+                <div class="branch">🌺</div>
+                <div class="petal">🌸</div>
+                <div class="petal">🌸</div>
+                <div class="petal">🌸</div>
+                <div class="petal">🌸</div>
+                <div class="petal">🌸</div>
+                <div class="petal">🌸</div>
+                <div class="petal">🌸</div>
+                <div class="petal">🌸</div>
+                <div class="petal">🌸</div>
+                <div class="petal">🌸</div>
+            </div>
+            <div class="cloud-container">
+                <div class="cloud cloud-1"></div>
+                <div class="cloud cloud-2"></div>
+                <div class="cloud cloud-3"></div>
+            </div>
+            <div class="content-wrapper">
+                <a href="index.html" class="back-btn">← Назад к списку</a>
+                <div class="event-header">
+                    <h1 class="event-title">🎂 Розыгрыш ДР 🎂</h1>
+                    <div class="event-date">День рождения | 28.02.2026</div>
+                </div>
+                <div class="event-content">
+                    <div class="glass-card">
+                        <h3>Как это было</h3>
+                        <p>В честь моего 18-летия я решил разыграть <strong style="color:#E6A200;">3.200 Рублей</strong>. Разыгрывал я их поэтапно, в 2 этапа. Было очень круто и эмоционально!</p>
+                        
+                        <div class="steps">
+                            <div class="step-item">🎯 1 Этап <span>— Отборочный тур среди всех желающих</span></div>
+                            <div class="step-item">🏆 2 Этап <span>— Финальный розыгрыш среди победителей</span></div>
+                        </div>
+                    </div>
+                    <div class="glass-card">
+                        <h3>Участники</h3>
+                        <p>Всего в розыгрыше приняло участие <strong style="color:#E6A200;">7 человек</strong>. Спасибо каждому, кто был со мной в этот день! ❤️</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

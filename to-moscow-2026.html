@@ -1,0 +1,418 @@
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>To Moscow 2026 — Дневник путешествия</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏙️</text></svg>">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #e0e5ec;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .phone-frame {
+            max-width: 375px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 45px;
+            padding: 12px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+            margin: 20px auto;
+            height: 812px;
+            position: relative;
+        }
+        .screen {
+            background: linear-gradient(180deg, #DDF4FF 0%, #A9E0F5 100%);
+            border-radius: 35px;
+            height: 100%;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        @media (max-width: 450px) {
+            .phone-frame {
+                max-width: 100%;
+                border: none;
+                border-radius: 0;
+                padding: 0;
+                box-shadow: none;
+                margin: 0;
+                height: 100vh;
+                background: transparent;
+                backdrop-filter: none;
+            }
+            .screen {
+                border-radius: 0;
+                height: 100vh;
+            }
+        }
+
+        /* Облака */
+        .cloud-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: inherit;
+        }
+        .cloud {
+            position: absolute;
+            background: #ffffff;
+            border-radius: 50%;
+            opacity: 0.85;
+            filter: blur(1.5px);
+        }
+        .cloud-1 {
+            width: 200px;
+            height: 60px;
+            top: 10%;
+            left: -20px;
+            box-shadow: 40px -30px 0 10px #fff, 90px -50px 0 30px #fff, 150px -20px 0 5px #fff;
+        }
+        .cloud-2 {
+            width: 240px;
+            height: 50px;
+            bottom: 20%;
+            right: -30px;
+            box-shadow: -40px -30px 0 15px #fff, -100px -50px 0 25px #fff, -160px -10px 0 10px #fff;
+        }
+        .cloud-3 {
+            width: 160px;
+            height: 40px;
+            top: 80%;
+            left: 20px;
+            box-shadow: -30px -20px 0 8px #fff, -80px -40px 0 15px #fff;
+            opacity: 0.6;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            padding: 25px 20px 20px 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 16px;
+            color: #1E3A5F;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 14px;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(8px);
+            padding: 6px 16px;
+            border-radius: 50px;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            align-self: flex-start;
+            transition: 0.2s;
+            flex-shrink: 0;
+        }
+        .back-btn:active {
+            transform: scale(0.95);
+        }
+
+        .event-header {
+            text-align: center;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+        }
+        .event-title {
+            font-size: 32px;
+            font-weight: 900;
+            color: #1A5276;
+            line-height: 1.2;
+            text-shadow: 0 2px 10px rgba(26, 82, 118, 0.15);
+        }
+        .event-title .city {
+            background: linear-gradient(135deg, #1A5276, #2980B9);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .event-date {
+            font-size: 13px;
+            color: #5A7D9A;
+            margin-top: 2px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .event-date span {
+            opacity: 0.6;
+            margin: 0 4px;
+        }
+
+        /* Контент */
+        .event-content {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding-bottom: 4px;
+        }
+        .event-content::-webkit-scrollbar {
+            width: 4px;
+        }
+        .event-content::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 10px;
+        }
+
+        /* Стеклянные карточки */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            border-radius: 16px;
+            padding: 14px 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            transition: transform 0.15s;
+        }
+        .glass-card:active {
+            transform: scale(0.98);
+        }
+
+        .glass-card .day-badge {
+            display: inline-block;
+            font-size: 10px;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, #1A5276, #2980B9);
+            padding: 2px 12px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+        }
+
+        .glass-card .day-title {
+            font-size: 16px;
+            font-weight: 800;
+            color: #1E3A5F;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .glass-card .day-title .icon {
+            font-size: 20px;
+        }
+
+        .glass-card .day-text {
+            font-size: 13px;
+            color: #2C3E50;
+            line-height: 1.7;
+        }
+
+        .glass-card .day-text .highlight {
+            color: #1A5276;
+            font-weight: 700;
+        }
+
+        .glass-card .day-text .emoji {
+            font-size: 15px;
+            margin: 0 2px;
+        }
+
+        .glass-card .day-text .place {
+            display: inline-block;
+            background: rgba(26, 82, 118, 0.08);
+            padding: 0 8px;
+            border-radius: 12px;
+            font-weight: 600;
+            color: #1A5276;
+        }
+
+        /* Специальная карточка для ВК ФЕСТ */
+        .glass-card .vk-fest-link {
+            display: inline-block;
+            margin-top: 6px;
+            color: #8E44AD;
+            font-weight: 700;
+            text-decoration: none;
+            background: rgba(142, 68, 173, 0.12);
+            padding: 3px 14px;
+            border-radius: 50px;
+            font-size: 12px;
+            transition: 0.2s;
+            border: 1px solid rgba(142, 68, 173, 0.1);
+        }
+        .glass-card .vk-fest-link:active {
+            transform: scale(0.95);
+        }
+
+        /* Итоговая карточка */
+        .glass-card.summary {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.08), rgba(255, 165, 0, 0.05));
+            border-color: rgba(255, 215, 0, 0.15);
+            text-align: center;
+        }
+        .glass-card.summary .summary-icon {
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+        .glass-card.summary .summary-text {
+            font-size: 13px;
+            color: #2C3E50;
+            font-weight: 600;
+        }
+        .glass-card.summary .summary-text .gold {
+            color: #E67E22;
+        }
+
+        @media (max-width: 380px) {
+            .event-title {
+                font-size: 26px;
+            }
+            .glass-card .day-title {
+                font-size: 14px;
+            }
+            .glass-card .day-text {
+                font-size: 12px;
+            }
+            .glass-card {
+                padding: 12px 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="phone-frame">
+        <div class="screen">
+            <div class="cloud-container">
+                <div class="cloud cloud-1"></div>
+                <div class="cloud cloud-2"></div>
+                <div class="cloud cloud-3"></div>
+            </div>
+
+            <div class="content-wrapper">
+                <a href="index.html" class="back-btn">← Назад</a>
+
+                <div class="event-header">
+                    <h1 class="event-title">🏙️ <span class="city">To Moscow</span></h1>
+                    <div class="event-date">18–22 июля 2026 <span>|</span> 5 дней в столице</div>
+                </div>
+
+                <div class="event-content">
+
+                    <!-- ДЕНЬ 1 -->
+                    <div class="glass-card">
+                        <div class="day-badge">День 1</div>
+                        <div class="day-title">
+                            <span class="icon">🚗</span> Дорога и сердце Москвы
+                        </div>
+                        <div class="day-text">
+                            Выехал в <span class="highlight">7:00</span> и уже в <span class="highlight">12:00</span> был в Москве. 
+                            Заселился, быстро перекусил — и сразу в центр! 
+                            Прогулялся по <span class="place">Красной площади</span> 🌟, заглянул в 
+                            <span class="place">Александровский сад</span> 🌿, где так приятно гулять в тени деревьев. 
+                            Потом отправился в <span class="place">Зарядье</span> — и конечно же, 
+                            <span class="highlight">полетал над Москвой</span> на аттракционе «Полет Москвы» 🦅. 
+                            Вид был невероятный! После такого насыщенного дня — домой, отдыхать.
+                        </div>
+                    </div>
+
+                    <!-- ДЕНЬ 2 -->
+                    <div class="glass-card">
+                        <div class="day-badge">День 2</div>
+                        <div class="day-title">
+                            <span class="icon">🎡</span> ВДНХ, фестивали и драйв
+                        </div>
+                        <div class="day-text">
+                            Утром выдвинулся на <span class="place">ВДНХ</span> — место силы и красоты. 
+                            Там попал на <span class="highlight">SADLER FEST</span> 🎧 — крутая атмосфера, 
+                            классная музыка, заряд энергии на весь день! 
+                            Пару часов пробыл там, а потом отправился на главное событие — 
+                            <span class="highlight">ВК ФЕСТ 2026</span> 🎤🔥 (подробнее на отдельной странице). 
+                            Там было просто офигенно! Вечером, уставший, но счастливый, поехал домой.
+                            <br>
+                            <a href="vk-fest-2026.html" class="vk-fest-link">🎤 Подробнее о ВК ФЕСТ 2026 →</a>
+                        </div>
+                    </div>
+
+                    <!-- ДЕНЬ 3 -->
+                    <div class="glass-card">
+                        <div class="day-badge">День 3</div>
+                        <div class="day-title">
+                            <span class="icon">🎭</span> Арбат, рекорды и гастрономия
+                        </div>
+                        <div class="day-text">
+                            День начался с прогулки по <span class="place">Арбату</span> — одной из самых 
+                            атмосферных улиц Москвы 🚶. Зашли в музей <span class="highlight">«Рекордиум»</span> 🏅 — 
+                            было очень интересно и познавательно! Потом ещё долго гуляли по Арбату, 
+                            наслаждаясь уличной атмосферой. А завершили день ужином в 
+                            <span class="place">ресторане byBasta</span> 🍽️ — очень вкусно, 
+                            атмосферно и стильно. Довольные и сытые поехали домой.
+                        </div>
+                    </div>
+
+                    <!-- ДЕНЬ 4 -->
+                    <div class="glass-card">
+                        <div class="day-badge">День 4</div>
+                        <div class="day-title">
+                            <span class="icon">🛍️</span> Шопинг и отдых
+                        </div>
+                        <div class="day-text">
+                            Решили сделать день полегче — просто погуляли по 
+                            <span class="place">ТЦ «Авиапарк»</span> 🛒. 
+                            Посмотрели на огромный аквариум, зашли в магазины, 
+            перекусили в фуд-корте. Отличный способ расслабиться 
+                            перед дорогой домой. Вечером вернулись и спокойно 
+                            собрали вещи.
+                        </div>
+                    </div>
+
+                    <!-- ДЕНЬ 5 -->
+                    <div class="glass-card">
+                        <div class="day-badge">День 5</div>
+                        <div class="day-title">
+                            <span class="icon">🚙</span> Дорога домой
+                        </div>
+                        <div class="day-text">
+                            Утро началось с хорошего завтрака, последние сборы — и в путь. 
+                            Выехали в <span class="highlight">14:00</span>. Дорога прошла отлично, 
+                            и уже в <span class="highlight">19:30</span> я был дома 🏡. 
+                            Москва подарила невероятные эмоции, но дом есть дом ❤️.
+                        </div>
+                    </div>
+
+                    <!-- ИТОГ -->
+                    <div class="glass-card summary">
+                        <div class="summary-icon">🌟</div>
+                        <div class="summary-text">
+                            <span class="gold">5 дней</span> в Москве — 
+                            <span class="gold">море эмоций</span>, 
+                            новые места, <span class="gold">яркие впечатления</span> и 
+                            <span class="gold">незабываемые моменты</span>.
+                            <br>🇷🇺 <span class="gold">Я обязательно вернусь!</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
