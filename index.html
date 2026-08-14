@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -19,6 +18,7 @@
             align-items: center;
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            overflow: hidden;
         }
 
         .phone-frame {
@@ -33,15 +33,6 @@
             margin: 20px auto;
             height: 812px;
             position: relative;
-        }
-        .screen {
-            background: linear-gradient(180deg, #DDF4FF 0%, #A9E0F5 100%);
-            border-radius: 35px;
-            height: 100%;
-            width: 100%;
-            position: relative;
-            display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
         @media (max-width: 450px) {
@@ -57,12 +48,29 @@
                 backdrop-filter: none;
             }
             .screen {
-                border-radius: 0;
-                height: 100vh;
+                border-radius: 0 !important;
+                height: 100vh !important;
             }
         }
 
-        /* Облака */
+        .screen {
+            border-radius: 35px;
+            height: 100%;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: background 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .screen.events-mode {
+            background: linear-gradient(180deg, #DDF4FF 0%, #A9E0F5 100%);
+        }
+        .screen.games-mode {
+            background: linear-gradient(180deg, #0B0E1A 0%, #1A1A2E 40%, #16213E 70%, #0F0F1F 100%);
+        }
+
+        /* --- ОБЛАКА (только для событий) --- */
         .cloud-container {
             position: absolute;
             top: 0;
@@ -73,6 +81,11 @@
             pointer-events: none;
             overflow: hidden;
             border-radius: inherit;
+            opacity: 1;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .cloud-container.hidden {
+            opacity: 0;
         }
         .cloud {
             position: absolute;
@@ -104,6 +117,52 @@
             opacity: 0.6;
         }
 
+        /* --- ЗВЁЗДЫ (только для игр) --- */
+        .stars-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .stars-container.show {
+            opacity: 1;
+        }
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 2s ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Неоновое свечение для игрового режима */
+        .neon-glow {
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(142, 68, 173, 0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 80%, rgba(52, 152, 219, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .neon-glow.show {
+            opacity: 1;
+        }
+
         .content-wrapper {
             position: relative;
             z-index: 10;
@@ -113,39 +172,68 @@
             flex-direction: column;
         }
 
-        /* Шапка */
+        /* --- ШАПКА --- */
         .hero-logo {
             text-align: center;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
             flex-shrink: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
         }
         .logo-title {
             font-size: 40px;
             line-height: 1;
             font-weight: 900;
-            color: #1E3A5F;
             letter-spacing: -1px;
+            transition: color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .screen.events-mode .logo-title {
+            color: #1E3A5F;
             text-shadow: 0 4px 15px rgba(255, 255, 255, 0.6);
+        }
+        .screen.games-mode .logo-title {
+            color: #A78BFA;
+            text-shadow: 0 0 40px rgba(167, 139, 250, 0.2), 0 0 80px rgba(167, 139, 250, 0.05);
         }
         .logo-sub {
             font-size: 13px;
-            color: #5A7D9A;
             font-weight: 600;
             margin-top: 2px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .screen.events-mode .logo-sub {
+            color: #5A7D9A;
+        }
+        .screen.games-mode .logo-sub {
+            color: #6B7AA8;
         }
 
-        /* Шкала прогресса — обновлённая */
+        /* --- СТЕКЛЯННАЯ ШКАЛА (только для событий) --- */
         .season-scale {
             flex-shrink: 0;
-            margin-bottom: 18px;
+            margin-bottom: 16px;
             background: rgba(255, 255, 255, 0.2);
             backdrop-filter: blur(8px);
             border-radius: 30px;
             padding: 14px 18px 16px 18px;
             border: 1px solid rgba(255, 255, 255, 0.35);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        transform 0.5s cubic-bezier(0.4, 0, 0.2, 1),
+                        backdrop-filter 0.5s ease;
+            max-height: 200px;
+            overflow: hidden;
         }
-
+        .season-scale.hidden {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+            pointer-events: none;
+            max-height: 0;
+            padding: 0 18px;
+            margin-bottom: 0;
+            border: none;
+        }
         .scale-header {
             display: flex;
             justify-content: space-between;
@@ -160,23 +248,11 @@
             font-weight: 700;
             transition: all 0.3s;
         }
-        .scale-header .label.spring-label {
-            color: #66BB6A;
-        }
-        .scale-header .label.spring-label.active {
-            color: #2E7D32;
-            transform: scale(1.05);
-        }
-        .scale-header .label.summer-label {
-            color: #FFA726;
-        }
-        .scale-header .label.summer-label.active {
-            color: #E67E22;
-            transform: scale(1.05);
-        }
-        .scale-header .label .icon {
-            font-size: 16px;
-        }
+        .scale-header .label.spring-label { color: #66BB6A; }
+        .scale-header .label.spring-label.active { color: #2E7D32; transform: scale(1.05); }
+        .scale-header .label.summer-label { color: #FFA726; }
+        .scale-header .label.summer-label.active { color: #E67E22; transform: scale(1.05); }
+        .scale-header .label .icon { font-size: 16px; }
         .scale-header .season-indicator {
             font-size: 11px;
             font-weight: 700;
@@ -187,15 +263,8 @@
             opacity: 0.7;
             transition: all 0.3s;
         }
-        .scale-header .season-indicator.active {
-            opacity: 1;
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        .scale-track-wrap {
-            position: relative;
-            padding: 0 4px;
-        }
+        .scale-header .season-indicator.active { opacity: 1; background: rgba(255, 255, 255, 0.5); }
+        .scale-track-wrap { position: relative; padding: 0 4px; }
         .scale-track {
             position: relative;
             height: 8px;
@@ -223,8 +292,6 @@
             position: relative;
             box-shadow: 0 1px 6px rgba(255, 167, 38, 0.2);
         }
-
-        /* Круглый ползунок */
         .scale-handle {
             position: absolute;
             top: 50%;
@@ -243,17 +310,9 @@
             z-index: 2;
             border: 2px solid rgba(255, 255, 255, 0.8);
         }
-        .scale-handle.spring-handle {
-            background: linear-gradient(135deg, #A5D6A7, #66BB6A);
-        }
-        .scale-handle.summer-handle {
-            background: linear-gradient(135deg, #FFE082, #FFA726);
-        }
-        .scale-handle.mixed-handle {
-            background: linear-gradient(135deg, #A5D6A7, #FFE082);
-        }
-
-        /* Метки под шкалой */
+        .scale-handle.spring-handle { background: linear-gradient(135deg, #A5D6A7, #66BB6A); }
+        .scale-handle.summer-handle { background: linear-gradient(135deg, #FFE082, #FFA726); }
+        .scale-handle.mixed-handle { background: linear-gradient(135deg, #A5D6A7, #FFE082); }
         .scale-labels {
             display: flex;
             justify-content: space-between;
@@ -270,11 +329,7 @@
             align-items: center;
             gap: 4px;
         }
-        .scale-labels span.active {
-            opacity: 1;
-            color: #1E3A5F;
-            transform: scale(1.05);
-        }
+        .scale-labels span.active { opacity: 1; color: #1E3A5F; transform: scale(1.05); }
         .scale-labels span .dot {
             display: inline-block;
             width: 6px;
@@ -282,34 +337,36 @@
             border-radius: 50%;
             transition: all 0.3s;
         }
-        .scale-labels span .dot.spring-dot {
-            background: #66BB6A;
-        }
-        .scale-labels span .dot.summer-dot {
-            background: #FFA726;
-        }
-        .scale-labels span.active .dot {
-            transform: scale(1.3);
-            box-shadow: 0 0 8px rgba(255, 167, 38, 0.3);
-        }
+        .scale-labels span .dot.spring-dot { background: #66BB6A; }
+        .scale-labels span .dot.summer-dot { background: #FFA726; }
+        .scale-labels span.active .dot { transform: scale(1.3); box-shadow: 0 0 8px rgba(255, 167, 38, 0.3); }
 
-        /* Счётчик */
+        /* --- СЧЁТЧИК --- */
         .counter {
             text-align: center;
             font-size: 12px;
-            color: #5A7D9A;
             font-weight: 600;
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             flex-shrink: 0;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(4px);
             padding: 4px 14px;
             border-radius: 50px;
             align-self: center;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .screen.events-mode .counter {
+            color: #5A7D9A;
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(4px);
             border: 1px solid rgba(255, 255, 255, 0.3);
         }
+        .screen.games-mode .counter {
+            color: #A78BFA;
+            background: rgba(167, 139, 250, 0.08);
+            border: 1px solid rgba(167, 139, 250, 0.15);
+            backdrop-filter: blur(4px);
+        }
 
-        /* Список событий */
+        /* --- СПИСОК --- */
         .events-list {
             flex: 1;
             overflow-y: auto;
@@ -320,18 +377,20 @@
             gap: 10px;
             padding-bottom: 4px;
         }
-        .events-list::-webkit-scrollbar {
-            width: 3px;
-        }
-        .events-list::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.4);
-            border-radius: 10px;
-        }
+        .events-list::-webkit-scrollbar { width: 3px; }
+        .events-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.4); border-radius: 10px; }
 
         .event-item-link {
             display: block;
             text-decoration: none;
             color: inherit;
+            opacity: 0;
+            transform: translateY(12px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        .event-item-link.show {
+            opacity: 1;
+            transform: translateY(0);
         }
 
         .event-item {
@@ -345,32 +404,38 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             transition: 0.15s;
-            opacity: 0;
-            transform: translateY(12px);
             border-left: 4px solid #66BB6A;
         }
-        .event-item.summer-card {
-            border-left-color: #FFA726;
-            background: rgba(255, 200, 0, 0.12);
+        .event-item.summer-card { border-left-color: #FFA726; background: rgba(255, 200, 0, 0.12); }
+        .event-item.spring-card { border-left-color: #66BB6A; background: rgba(76, 175, 80, 0.10); }
+        .event-item.neutral-card { border-left-color: #90A4AE; background: rgba(255, 255, 255, 0.15); }
+        
+        /* Карточки игр (тёмная тема) */
+        .screen.games-mode .event-item {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
         }
-        .event-item.spring-card {
-            border-left-color: #66BB6A;
-            background: rgba(76, 175, 80, 0.10);
+        .screen.games-mode .event-item .event-info h2 {
+            color: #E2E8F0;
         }
-        .event-item.neutral-card {
-            border-left-color: #90A4AE;
-            background: rgba(255, 255, 255, 0.15);
+        .screen.games-mode .event-item .event-info .meta {
+            color: #94A3B8;
+        }
+        .screen.games-mode .event-item .event-info .game-progress {
+            color: #94A3B8;
+        }
+        .screen.games-mode .event-item .event-icon {
+            opacity: 0.9;
         }
 
-        .event-item-link:active .event-item {
-            transform: scale(0.96);
-            transition: 0.08s;
-        }
-        .event-item-link.show .event-item {
-            opacity: 1;
-            transform: translateY(0);
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
+        .event-item.game-card { border-left-color: #8E44AD; }
+        .event-item.game-card.completed { border-left-color: #27AE60; }
+        .event-item.game-card.in-progress { border-left-color: #F39C12; }
+        .event-item.game-card.planned { border-left-color: #3498DB; }
+
+        .event-item-link:active .event-item { transform: scale(0.96); transition: 0.08s; }
 
         .event-icon {
             font-size: 26px;
@@ -388,17 +453,42 @@
             font-weight: 800;
             color: #1E3A5F;
             letter-spacing: -0.3px;
+            transition: color 0.3s ease;
         }
         .event-info .meta {
             font-size: 11px;
             font-weight: 600;
             color: #5A7D9A;
             margin-top: 2px;
+            transition: color 0.3s ease;
         }
         .event-info .meta span {
             font-weight: 300;
             opacity: 0.6;
             margin: 0 3px;
+        }
+        .event-info .game-progress {
+            font-size: 11px;
+            color: #5A7D9A;
+            margin-top: 2px;
+        }
+        .event-info .game-progress .bar-bg {
+            display: inline-block;
+            width: 60px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+        .event-info .game-progress .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #8E44AD, #F39C12);
+        }
+        .screen.games-mode .event-info .game-progress .bar-bg {
+            background: rgba(255,255,255,0.05);
         }
 
         .event-badge {
@@ -410,81 +500,79 @@
             white-space: nowrap;
             flex-shrink: 0;
             margin-left: 8px;
+            transition: all 0.3s ease;
         }
-        .event-badge.past {
-            background: rgba(255, 255, 255, 0.4);
-            color: #5A7D9A;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        .event-badge.past { background: rgba(255, 255, 255, 0.4); color: #5A7D9A; border: 1px solid rgba(255, 255, 255, 0.3); }
+        .event-badge.soon { background: #FF006F; color: #FFFFFF; box-shadow: 0 4px 12px rgba(255, 0, 111, 0.25); }
+        .event-badge.process { background: #FF8C00; color: #FFFFFF; animation: pulseProcess 1.8s ease-in-out infinite; }
+        .event-badge.completed { background: #27AE60; color: #FFFFFF; }
+        .event-badge.in-progress { background: #F39C12; color: #FFFFFF; animation: pulseProcess 1.8s ease-in-out infinite; }
+        .event-badge.planned { background: #3498DB; color: #FFFFFF; }
+
+        .screen.games-mode .event-badge.past {
+            background: rgba(255, 255, 255, 0.05);
+            color: #64748B;
+            border-color: rgba(255, 255, 255, 0.05);
         }
-        .event-badge.soon {
-            background: #FF006F;
-            color: #FFFFFF;
-            box-shadow: 0 4px 12px rgba(255, 0, 111, 0.25);
-        }
-        .event-badge.process {
-            background: #FF8C00;
-            color: #FFFFFF;
-            animation: pulseProcess 1.8s ease-in-out infinite;
-        }
+
         @keyframes pulseProcess {
-            0% {
-                transform: scale(1);
-                box-shadow: 0 0 8px rgba(255, 140, 0, 0.4);
-            }
-            50% {
-                transform: scale(1.06);
-                box-shadow: 0 0 20px rgba(255, 140, 0, 0.7);
-            }
-            100% {
-                transform: scale(1);
-                box-shadow: 0 0 8px rgba(255, 140, 0, 0.4);
-            }
+            0% { transform: scale(1); box-shadow: 0 0 8px rgba(255, 140, 0, 0.4); }
+            50% { transform: scale(1.06); box-shadow: 0 0 20px rgba(255, 140, 0, 0.7); }
+            100% { transform: scale(1); box-shadow: 0 0 8px rgba(255, 140, 0, 0.4); }
         }
 
         @media (max-width: 380px) {
-            .logo-title {
-                font-size: 32px;
-            }
-            .event-info h2 {
-                font-size: 15px;
-            }
-            .event-item {
-                padding: 10px 14px;
-            }
-            .event-icon {
-                font-size: 22px;
-                margin-right: 8px;
-            }
-            .scale-header .label {
-                font-size: 10px;
-            }
-            .scale-handle {
-                width: 20px;
-                height: 20px;
-                font-size: 10px;
-            }
+            .logo-title { font-size: 32px; }
+            .event-info h2 { font-size: 15px; }
+            .event-item { padding: 10px 14px; }
+            .event-icon { font-size: 22px; margin-right: 8px; }
+            .scale-header .label { font-size: 10px; }
+            .scale-handle { width: 20px; height: 20px; font-size: 10px; }
         }
     </style>
 </head>
 <body>
 
     <div class="phone-frame">
-        <div class="screen">
-            <div class="cloud-container">
+        <div class="screen events-mode" id="screen">
+            <!-- Облака (события) -->
+            <div class="cloud-container" id="cloudContainer">
                 <div class="cloud cloud-1"></div>
                 <div class="cloud cloud-2"></div>
                 <div class="cloud cloud-3"></div>
             </div>
 
-            <div class="content-wrapper">
+            <!-- Звёзды (игры) -->
+            <div class="stars-container" id="starsContainer">
+                <div class="star" style="width:2px;height:2px;top:5%;left:10%;animation-delay:0s;"></div>
+                <div class="star" style="width:3px;height:3px;top:12%;right:15%;animation-delay:0.5s;"></div>
+                <div class="star" style="width:1.5px;height:1.5px;top:25%;left:25%;animation-delay:1s;"></div>
+                <div class="star" style="width:2.5px;height:2.5px;top:8%;right:35%;animation-delay:0.3s;"></div>
+                <div class="star" style="width:2px;height:2px;top:40%;left:5%;animation-delay:1.5s;"></div>
+                <div class="star" style="width:3px;height:3px;top:55%;right:8%;animation-delay:0.8s;"></div>
+                <div class="star" style="width:1.5px;height:1.5px;top:70%;left:15%;animation-delay:2s;"></div>
+                <div class="star" style="width:2px;height:2px;top:45%;right:25%;animation-delay:0.2s;"></div>
+                <div class="star" style="width:2.5px;height:2.5px;top:85%;left:30%;animation-delay:1.2s;"></div>
+                <div class="star" style="width:3px;height:3px;top:15%;left:50%;animation-delay:0.7s;"></div>
+                <div class="star" style="width:1.5px;height:1.5px;top:60%;left:45%;animation-delay:1.8s;"></div>
+                <div class="star" style="width:2px;height:2px;top:90%;right:20%;animation-delay:0.4s;"></div>
+                <div class="star" style="width:2.5px;height:2.5px;top:30%;right:45%;animation-delay:1.3s;"></div>
+                <div class="star" style="width:1.5px;height:1.5px;top:50%;left:60%;animation-delay:0.6s;"></div>
+                <div class="star" style="width:3px;height:3px;top:75%;right:40%;animation-delay:1.6s;"></div>
+            </div>
+
+            <!-- Неоновое свечение -->
+            <div class="neon-glow" id="neonGlow"></div>
+
+            <div class="content-wrapper" id="app">
                 <!-- Шапка -->
                 <div class="hero-logo">
                     <h1 class="logo-title">ЛЕТО 2026</h1>
-                    <div class="logo-sub">☀️ Сезон отпусков</div>
+                    <div class="logo-sub" id="logoSub">☀️ Сезон отпусков</div>
                 </div>
 
-                <!-- Шкала прогресса — обновлённая -->
-                <div class="season-scale">
+                <!-- Стеклянная шкала -->
+                <div class="season-scale" id="seasonScale">
                     <div class="scale-header">
                         <div class="label spring-label active" id="springLabel">
                             <span class="icon">🌸</span> Весна
@@ -494,7 +582,6 @@
                             Лето <span class="icon">☀️</span>
                         </div>
                     </div>
-
                     <div class="scale-track-wrap">
                         <div class="scale-track" id="scaleTrack">
                             <div class="scale-track-bg"></div>
@@ -502,46 +589,40 @@
                             <div class="scale-handle mixed-handle" id="scaleHandle">🌿</div>
                         </div>
                     </div>
-
                     <div class="scale-labels">
-                        <span class="active" id="labelSpring">
-                            <span class="dot spring-dot"></span> Весна
-                        </span>
-                        <span id="labelAll">
-                            <span class="dot" style="background:linear-gradient(90deg,#66BB6A,#FFA726);"></span> Все
-                        </span>
-                        <span id="labelSummer">
-                            Лето <span class="dot summer-dot"></span>
-                        </span>
+                        <span class="active" id="labelSpring"><span class="dot spring-dot"></span> Весна</span>
+                        <span id="labelAll"><span class="dot" style="background:linear-gradient(90deg,#66BB6A,#FFA726);"></span> Все</span>
+                        <span id="labelSummer">Лето <span class="dot summer-dot"></span></span>
                     </div>
                 </div>
 
                 <!-- Счётчик -->
                 <div class="counter" id="counter">🌿 7 событий</div>
 
-                <!-- Список событий -->
+                <!-- Список -->
                 <div class="events-list" id="eventList"></div>
             </div>
         </div>
     </div>
 
     <script>
-        // ---------- ДАННЫЕ СОБЫТИЙ ----------
+        // ---------- ДАННЫЕ ----------
         const eventsData = [
-            { id: 'to-moscow-2026', title: 'To Moscow', date: '18.07.2026', type: 'Поездка', rawDate: '2026-07-18',
-                icon: '🏙️', season: 'summer' },
-            { id: 'vk-fest-2026', title: 'ВК ФЕСТ 2026', date: '19.07.2026', type: 'Фестиваль', rawDate: '2026-07-19',
-                icon: '🎤', season: 'summer' },
-            { id: 'molodezhnyy-den', title: 'Молодежный день', date: '27.06.2026', type: 'Фестиваль', rawDate: '2026-06-27',
-                icon: '🎉', season: 'summer' },
-            { id: 'concert-zveri', title: 'Концерт Звери', date: '16.05.2026', type: 'Концерт', rawDate: '2026-05-16',
-                icon: '🎸', season: 'spring' },
-            { id: 'to-moscow-2', title: 'To Moscow #2', date: '26.04.2026', type: 'Поездка', rawDate: '2026-04-26',
-                icon: '🏙️', season: 'spring' },
-            { id: 'rozgrysh-8-marta', title: 'Розыгрыш 8 марта', date: '08.03.2026', type: '8 марта', rawDate: '2026-03-08',
-                icon: '🌸', season: 'spring' },
-            { id: 'rozgrysh-dr', title: 'Розыгрыш ДР', date: '28.02.2026', type: 'День рождения', rawDate: '2026-02-28',
-                icon: '🎂', season: 'spring' }
+            { id: 'to-moscow-2026', title: 'To Moscow', date: '18.07.2026', type: 'Поездка', rawDate: '2026-07-18', icon: '🏙️', season: 'summer' },
+            { id: 'vk-fest-2026', title: 'ВК ФЕСТ 2026', date: '19.07.2026', type: 'Фестиваль', rawDate: '2026-07-19', icon: '🎤', season: 'summer' },
+            { id: 'molodezhnyy-den', title: 'Молодежный день', date: '27.06.2026', type: 'Фестиваль', rawDate: '2026-06-27', icon: '🎉', season: 'summer' },
+            { id: 'concert-zveri', title: 'Концерт Звери', date: '16.05.2026', type: 'Концерт', rawDate: '2026-05-16', icon: '🎸', season: 'spring' },
+            { id: 'to-moscow-2', title: 'To Moscow #2', date: '26.04.2026', type: 'Поездка', rawDate: '2026-04-26', icon: '🏙️', season: 'spring' },
+            { id: 'rozgrysh-8-marta', title: 'Розыгрыш 8 марта', date: '08.03.2026', type: '8 марта', rawDate: '2026-03-08', icon: '🌸', season: 'spring' },
+            { id: 'rozgrysh-dr', title: 'Розыгрыш ДР', date: '28.02.2026', type: 'День рождения', rawDate: '2026-02-28', icon: '🎂', season: 'spring' }
+        ];
+
+        const gamesData = [
+            { id: 'cyberpunk-2077', title: 'Cyberpunk 2077', status: 'in-progress', progress: 65, icon: '🤖', type: 'RPG', platform: 'PC' },
+            { id: 'baldurs-gate-3', title: 'Baldur\'s Gate 3', status: 'completed', progress: 100, icon: '🐉', type: 'RPG', platform: 'PC' },
+            { id: 'ghost-of-tsushima', title: 'Ghost of Tsushima', status: 'planned', progress: 0, icon: '⚔️', type: 'Action', platform: 'PS5' },
+            { id: 'red-dead-2', title: 'Red Dead Redemption 2', status: 'in-progress', progress: 40, icon: '🤠', type: 'Action', platform: 'PS5' },
+            { id: 'zelda-totk', title: 'Zelda: Tears of the Kingdom', status: 'planned', progress: 0, icon: '🗡️', type: 'Adventure', platform: 'Switch' }
         ];
 
         // ---------- СОРТИРОВКА ----------
@@ -553,7 +634,6 @@
             });
         }
 
-        // ---------- СТАТУС ----------
         function getMoscowDate() {
             const now = new Date();
             const moscowOffset = 3 * 60;
@@ -573,9 +653,37 @@
             return 'past';
         }
 
-        // ---------- РЕНДЕР СПИСКА ----------
+        function getGameBadge(status) {
+            const map = {
+                'completed': { text: 'ПРОЙДЕНА', class: 'completed' },
+                'in-progress': { text: 'В ПРОЦЕССЕ', class: 'in-progress' },
+                'planned': { text: 'В ПЛАНАХ', class: 'planned' }
+            };
+            return map[status] || { text: status, class: 'planned' };
+        }
+
+        // ---------- DOM ЭЛЕМЕНТЫ ----------
+        const screen = document.getElementById('screen');
         const listEl = document.getElementById('eventList');
         const counterEl = document.getElementById('counter');
+        const logoSub = document.getElementById('logoSub');
+        const seasonScale = document.getElementById('seasonScale');
+        const cloudContainer = document.getElementById('cloudContainer');
+        const starsContainer = document.getElementById('starsContainer');
+        const neonGlow = document.getElementById('neonGlow');
+
+        let currentTab = 'events';
+        let currentMode = 'all';
+        let isTransitioning = false;
+
+        // ---------- РЕНДЕР ----------
+        function render() {
+            if (currentTab === 'events') {
+                renderEvents(currentMode);
+            } else {
+                renderGames();
+            }
+        }
 
         function renderEvents(mode) {
             let filtered;
@@ -588,8 +696,7 @@
 
             listEl.innerHTML = '';
             if (sorted.length === 0) {
-                listEl.innerHTML =
-                    `<div style="text-align:center;color:#5A7D9A;font-size:14px;padding:30px 0;">Нет событий в этом сезоне</div>`;
+                listEl.innerHTML = `<div style="text-align:center;color:#5A7D9A;font-size:14px;padding:30px 0;">Нет событий в этом сезоне</div>`;
                 counterEl.textContent = `🌿 0 событий`;
                 return;
             }
@@ -598,9 +705,8 @@
                 const status = getEventStatus(ev.rawDate);
                 let badgeText = 'ПРОШЛО';
                 let badgeClass = 'past';
-                if (status === 'soon') { badgeText = 'СКОРО';
-                    badgeClass = 'soon'; } else if (status === 'process') { badgeText = 'В ПРОЦЕССЕ';
-                    badgeClass = 'process'; }
+                if (status === 'soon') { badgeText = 'СКОРО'; badgeClass = 'soon'; }
+                else if (status === 'process') { badgeText = 'В ПРОЦЕССЕ'; badgeClass = 'process'; }
 
                 const link = document.createElement('a');
                 link.href = ev.id + '.html';
@@ -617,13 +723,13 @@
                 item.style.transitionDelay = (index * 0.05) + 's';
 
                 item.innerHTML = `
-                        <div class="event-icon">${ev.icon}</div>
-                        <div class="event-info">
-                            <h2>${ev.title}</h2>
-                            <div class="meta">${ev.type} <span>|</span> ${ev.date}</div>
-                        </div>
-                        <div class="event-badge ${badgeClass}">${badgeText}</div>
-                    `;
+                    <div class="event-icon">${ev.icon}</div>
+                    <div class="event-info">
+                        <h2>${ev.title}</h2>
+                        <div class="meta">${ev.type} <span>|</span> ${ev.date}</div>
+                    </div>
+                    <div class="event-badge ${badgeClass}">${badgeText}</div>
+                `;
 
                 link.appendChild(item);
                 listEl.appendChild(link);
@@ -632,7 +738,63 @@
             counterEl.textContent = `🌿 ${sorted.length} событий`;
         }
 
-        // ---------- ШКАЛА ПРОГРЕССА ----------
+        function renderGames() {
+            const order = { 'in-progress': 0, 'completed': 1, 'planned': 2 };
+            const sorted = [...gamesData].sort((a, b) => order[a.status] - order[b.status]);
+
+            listEl.innerHTML = '';
+            if (sorted.length === 0) {
+                listEl.innerHTML = `<div style="text-align:center;color:#5A7D9A;font-size:14px;padding:30px 0;">Нет игр в списке</div>`;
+                counterEl.textContent = `🎮 0 игр`;
+                return;
+            }
+
+            sorted.forEach((game, index) => {
+                const badge = getGameBadge(game.status);
+                const link = document.createElement('a');
+                link.href = game.id + '.html';
+                link.className = 'event-item-link show';
+
+                const item = document.createElement('div');
+                let cardClass = 'game-card';
+                if (game.status === 'completed') cardClass += ' completed';
+                else if (game.status === 'in-progress') cardClass += ' in-progress';
+                else if (game.status === 'planned') cardClass += ' planned';
+                item.className = `event-item ${cardClass}`;
+                item.style.transitionDelay = (index * 0.05) + 's';
+
+                let progressHTML = '';
+                if (game.status === 'in-progress') {
+                    progressHTML = `
+                        <div class="game-progress">
+                            Прогресс: ${game.progress}%
+                            <span class="bar-bg"><span class="bar-fill" style="width:${game.progress}%;"></span></span>
+                        </div>
+                    `;
+                } else if (game.status === 'completed') {
+                    progressHTML = `<div class="game-progress">✅ Пройдена!</div>`;
+                } else {
+                    progressHTML = `<div class="game-progress">📅 В планах</div>`;
+                }
+
+                item.innerHTML = `
+                    <div class="event-icon">${game.icon}</div>
+                    <div class="event-info">
+                        <h2>${game.title}</h2>
+                        <div class="meta">${game.type} <span>|</span> ${game.platform}</div>
+                        ${progressHTML}
+                    </div>
+                    <div class="event-badge ${badge.class}">${badge.text}</div>
+                `;
+
+                link.appendChild(item);
+                listEl.appendChild(link);
+            });
+
+            counterEl.textContent = `🎮 ${sorted.length} игр`;
+        }
+
+        // ---------- ШКАЛА ----------
         const scaleFill = document.getElementById('scaleFill');
         const scaleTrack = document.getElementById('scaleTrack');
         const scaleHandle = document.getElementById('scaleHandle');
@@ -643,16 +805,15 @@
         const labelAll = document.getElementById('labelAll');
         const seasonIndicator = document.getElementById('seasonIndicator');
 
-        let currentMode = 'all';
         let currentValue = 0.5;
 
         function updateScale(value) {
+            if (currentTab !== 'events') return;
             currentValue = Math.max(0, Math.min(1, value));
             const percent = currentValue * 100;
             scaleFill.style.width = percent + '%';
             scaleHandle.style.left = percent + '%';
 
-            // Обновляем иконку и цвет ползунка
             if (currentValue < 0.25) {
                 scaleHandle.className = 'scale-handle spring-handle';
                 scaleHandle.textContent = '🌸';
@@ -687,11 +848,10 @@
                 labelSummer.classList.remove('active');
                 currentMode = 'all';
             }
-
             renderEvents(currentMode);
         }
 
-        // ---------- ВЗАИМОДЕЙСТВИЕ С ШКАЛОЙ ----------
+        // Взаимодействие со шкалой
         let isDraggingScale = false;
 
         function getScaleValue(clientX) {
@@ -701,6 +861,7 @@
         }
 
         function onScaleStart(e) {
+            if (currentTab !== 'events') return;
             e.preventDefault();
             isDraggingScale = true;
             const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
@@ -709,7 +870,7 @@
         }
 
         function onScaleMove(e) {
-            if (!isDraggingScale) return;
+            if (!isDraggingScale || currentTab !== 'events') return;
             e.preventDefault();
             const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
             const value = getScaleValue(clientX);
@@ -717,15 +878,14 @@
         }
 
         function onScaleEnd(e) {
-            if (!isDraggingScale) return;
+            if (!isDraggingScale || currentTab !== 'events') return;
             isDraggingScale = false;
-            // Доводим до ближайшего состояния
             const target = currentValue < 0.25 ? 0 : (currentValue > 0.75 ? 1 : 0.5);
             updateScale(target);
         }
 
         function onScaleClick(e) {
-            if (isDraggingScale) return;
+            if (isDraggingScale || currentTab !== 'events') return;
             const clientX = e.clientX;
             const value = getScaleValue(clientX);
             const target = value < 0.25 ? 0 : (value > 0.75 ? 1 : 0.5);
@@ -735,12 +895,92 @@
         scaleTrack.addEventListener('mousedown', onScaleStart);
         document.addEventListener('mousemove', onScaleMove);
         document.addEventListener('mouseup', onScaleEnd);
-
         scaleTrack.addEventListener('touchstart', onScaleStart, { passive: false });
         document.addEventListener('touchmove', onScaleMove, { passive: false });
         document.addEventListener('touchend', onScaleEnd, { passive: false });
-
         scaleTrack.addEventListener('click', onScaleClick);
+
+        // ---------- ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК (СВАЙП + ПЛАВНЫЙ ПЕРЕХОД) ----------
+        function switchTab(tab) {
+            if (isTransitioning || tab === currentTab) return;
+            isTransitioning = true;
+
+            const wasEvents = currentTab === 'events';
+            currentTab = tab;
+
+            // Меняем фон
+            if (tab === 'events') {
+                screen.classList.remove('games-mode');
+                screen.classList.add('events-mode');
+                logoSub.textContent = '☀️ Сезон отпусков';
+                cloudContainer.classList.remove('hidden');
+                starsContainer.classList.remove('show');
+                neonGlow.classList.remove('show');
+                seasonScale.classList.remove('hidden');
+                // Показываем шкалу с анимацией
+                setTimeout(() => {
+                    seasonScale.style.display = 'block';
+                    // Триггерим reflow для анимации
+                    void seasonScale.offsetHeight;
+                    seasonScale.classList.remove('hidden');
+                }, 50);
+            } else {
+                screen.classList.remove('events-mode');
+                screen.classList.add('games-mode');
+                logoSub.textContent = '🎮 Игровой сезон';
+                cloudContainer.classList.add('hidden');
+                starsContainer.classList.add('show');
+                neonGlow.classList.add('show');
+                seasonScale.classList.add('hidden');
+                setTimeout(() => {
+                    seasonScale.style.display = 'none';
+                }, 500);
+            }
+
+            // Обновляем контент с задержкой для плавности
+            setTimeout(() => {
+                render();
+                isTransitioning = false;
+            }, 100);
+        }
+
+        // ---------- СВАЙП ----------
+        let touchStartX = 0;
+        let touchStartY = 0;
+        let isSwiping = false;
+
+        const contentWrapper = document.getElementById('app');
+
+        contentWrapper.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+            touchStartY = e.changedTouches[0].screenY;
+            isSwiping = true;
+        }, { passive: true });
+
+        contentWrapper.addEventListener('touchmove', (e) => {
+            // Просто отслеживаем, не блокируем
+        }, { passive: true });
+
+        contentWrapper.addEventListener('touchend', (e) => {
+            if (!isSwiping) return;
+            const touchEndX = e.changedTouches[0].screenX;
+            const touchEndY = e.changedTouches[0].screenY;
+            
+            const diffX = touchStartX - touchEndX;
+            const diffY = Math.abs(touchStartY - touchEndY);
+            
+            // Проверяем, что свайп горизонтальный (вертикальное смещение меньше 50px)
+            if (Math.abs(diffX) > 50 && diffY < 50) {
+                if (diffX < 0 && currentTab === 'events') {
+                    // Свайп вправо -> игры
+                    switchTab('games');
+                } else if (diffX > 0 && currentTab === 'games') {
+                    // Свайп влево -> события
+                    switchTab('events');
+                }
+            }
+            isSwiping = false;
+        }, { passive: true });
 
         // ---------- ИНИЦИАЛИЗАЦИЯ ----------
         updateScale(0.5);
@@ -749,7 +989,7 @@
         window.addEventListener('resize', () => {
             clearTimeout(resizeTimer);
             resizeTimer = setTimeout(() => {
-                updateScale(currentValue);
+                if (currentTab === 'events') updateScale(currentValue);
             }, 100);
         });
     </script>
