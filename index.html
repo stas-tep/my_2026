@@ -18,7 +18,6 @@
             align-items: center;
             min-height: 100vh;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            overflow: hidden;
         }
 
         .phone-frame {
@@ -145,7 +144,6 @@
             100% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* Неоновое свечение для игрового режима */
         .neon-glow {
             position: absolute;
             top: -50%;
@@ -205,6 +203,53 @@
         }
         .screen.games-mode .logo-sub {
             color: #6B7AA8;
+        }
+
+        /* --- КНОПКИ ТАБОВ --- */
+        .tabs-container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 4px;
+            margin-bottom: 14px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .screen.games-mode .tabs-container {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 8px 0;
+            border: none;
+            border-radius: 26px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s ease;
+            background: transparent;
+            color: #5A7D9A;
+            text-align: center;
+        }
+        .screen.games-mode .tab-btn {
+            color: #6B7AA8;
+        }
+        .tab-btn.active {
+            background: rgba(255, 255, 255, 0.6);
+            color: #1E3A5F;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .screen.games-mode .tab-btn.active {
+            background: rgba(167, 139, 250, 0.15);
+            color: #A78BFA;
+            box-shadow: 0 0 30px rgba(167, 139, 250, 0.05);
+        }
+        .tab-btn .icon {
+            margin-right: 6px;
         }
 
         /* --- СТЕКЛЯННАЯ ШКАЛА (только для событий) --- */
@@ -521,6 +566,20 @@
             100% { transform: scale(1); box-shadow: 0 0 8px rgba(255, 140, 0, 0.4); }
         }
 
+        /* Подсказка для свайпа */
+        .swipe-hint {
+            text-align: center;
+            font-size: 10px;
+            color: rgba(90, 125, 154, 0.3);
+            margin-top: 6px;
+            flex-shrink: 0;
+            letter-spacing: 0.5px;
+            transition: color 0.5s ease;
+        }
+        .screen.games-mode .swipe-hint {
+            color: rgba(167, 139, 250, 0.15);
+        }
+
         @media (max-width: 380px) {
             .logo-title { font-size: 32px; }
             .event-info h2 { font-size: 15px; }
@@ -571,6 +630,12 @@
                     <div class="logo-sub" id="logoSub">☀️ Сезон отпусков</div>
                 </div>
 
+                <!-- Кнопки табов -->
+                <div class="tabs-container" id="tabsContainer">
+                    <button class="tab-btn active" data-tab="events" id="tabEvents">📅 События</button>
+                    <button class="tab-btn" data-tab="games" id="tabGames">🎮 Игры</button>
+                </div>
+
                 <!-- Стеклянная шкала -->
                 <div class="season-scale" id="seasonScale">
                     <div class="scale-header">
@@ -601,6 +666,9 @@
 
                 <!-- Список -->
                 <div class="events-list" id="eventList"></div>
+
+                <!-- Подсказка свайпа -->
+                <div class="swipe-hint">↔️ Свайп вправо/влево для переключения</div>
             </div>
         </div>
     </div>
@@ -671,6 +739,8 @@
         const cloudContainer = document.getElementById('cloudContainer');
         const starsContainer = document.getElementById('starsContainer');
         const neonGlow = document.getElementById('neonGlow');
+        const tabEvents = document.getElementById('tabEvents');
+        const tabGames = document.getElementById('tabGames');
 
         let currentTab = 'events';
         let currentMode = 'all';
@@ -900,13 +970,16 @@
         document.addEventListener('touchend', onScaleEnd, { passive: false });
         scaleTrack.addEventListener('click', onScaleClick);
 
-        // ---------- ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК (СВАЙП + ПЛАВНЫЙ ПЕРЕХОД) ----------
+        // ---------- ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ----------
         function switchTab(tab) {
             if (isTransitioning || tab === currentTab) return;
             isTransitioning = true;
 
-            const wasEvents = currentTab === 'events';
             currentTab = tab;
+
+            // Обновляем кнопки
+            tabEvents.classList.toggle('active', tab === 'events');
+            tabGames.classList.toggle('active', tab === 'games');
 
             // Меняем фон
             if (tab === 'events') {
@@ -917,10 +990,8 @@
                 starsContainer.classList.remove('show');
                 neonGlow.classList.remove('show');
                 seasonScale.classList.remove('hidden');
-                // Показываем шкалу с анимацией
                 setTimeout(() => {
                     seasonScale.style.display = 'block';
-                    // Триггерим reflow для анимации
                     void seasonScale.offsetHeight;
                     seasonScale.classList.remove('hidden');
                 }, 50);
@@ -937,12 +1008,15 @@
                 }, 500);
             }
 
-            // Обновляем контент с задержкой для плавности
             setTimeout(() => {
                 render();
                 isTransitioning = false;
             }, 100);
         }
+
+        // ---------- КЛИК ПО КНОПКАМ ----------
+        tabEvents.addEventListener('click', () => switchTab('events'));
+        tabGames.addEventListener('click', () => switchTab('games'));
 
         // ---------- СВАЙП ----------
         let touchStartX = 0;
@@ -957,9 +1031,7 @@
             isSwiping = true;
         }, { passive: true });
 
-        contentWrapper.addEventListener('touchmove', (e) => {
-            // Просто отслеживаем, не блокируем
-        }, { passive: true });
+        contentWrapper.addEventListener('touchmove', (e) => {}, { passive: true });
 
         contentWrapper.addEventListener('touchend', (e) => {
             if (!isSwiping) return;
@@ -969,13 +1041,10 @@
             const diffX = touchStartX - touchEndX;
             const diffY = Math.abs(touchStartY - touchEndY);
             
-            // Проверяем, что свайп горизонтальный (вертикальное смещение меньше 50px)
             if (Math.abs(diffX) > 50 && diffY < 50) {
                 if (diffX < 0 && currentTab === 'events') {
-                    // Свайп вправо -> игры
                     switchTab('games');
                 } else if (diffX > 0 && currentTab === 'games') {
-                    // Свайп влево -> события
                     switchTab('events');
                 }
             }
