@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Игровой дневник</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎮</text></svg>">
+    <style>
+        /* --- ГЛОБАЛЬНЫЕ --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: #0a0a1a;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Segoe UI', 'Poppins', system-ui, -apple-system, sans-serif;
+            overflow: hidden;
+        }
+
+        .phone-frame {
+            max-width: 375px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 45px;
+            padding: 12px;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8), inset 0 0 80px rgba(88, 0, 255, 0.05);
+            margin: 20px auto;
+            height: 812px;
+            position: relative;
+            overflow: hidden;
+        }
+        @media (max-width: 450px) {
+            .phone-frame {
+                max-width: 100%;
+                border: none;
+                border-radius: 0;
+                padding: 0;
+                box-shadow: none;
+                margin: 0;
+                height: 100vh;
+                background: transparent;
+                backdrop-filter: none;
+            }
+            .screen {
+                border-radius: 0 !important;
+                height: 100vh !important;
+            }
+        }
+
+        .screen {
+            border-radius: 35px;
+            height: 100%;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: radial-gradient(ellipse at 20% 20%, #1a1040 0%, #0a0a1a 70%);
+        }
+
+        /* --- КОСМИЧЕСКИЙ ФОН --- */
+        .stars-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .star-particle {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s ease-in-out infinite alternate;
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.1; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1.2); }
+        }
+        .neon-glow {
+            position: absolute;
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: radial-gradient(ellipse at 30% 20%, rgba(120, 0, 255, 0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 80%, rgba(0, 200, 255, 0.06) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 10;
+            padding: 25px 20px 15px 20px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- ШАПКА --- */
+        .hero-logo {
+            text-align: center;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+        }
+        .logo-title {
+            font-size: 34px;
+            line-height: 1;
+            font-weight: 900;
+            letter-spacing: 2px;
+            color: #c084fc;
+            text-shadow: 0 0 30px rgba(192, 132, 252, 0.3), 0 0 60px rgba(192, 132, 252, 0.1);
+            font-family: 'Poppins', sans-serif;
+        }
+        .logo-sub {
+            font-size: 11px;
+            font-weight: 600;
+            margin-top: 2px;
+            color: #7a8ba8;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* --- ПЕРЕКЛЮЧАТЕЛЬ --- */
+        .tabs-container {
+            display: flex;
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 4px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 7px 0;
+            border: none;
+            border-radius: 26px;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s ease;
+            background: transparent;
+            color: #7a8ba8;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+        }
+        .tab-btn.active {
+            background: rgba(192, 132, 252, 0.15);
+            color: #c084fc;
+            box-shadow: 0 0 30px rgba(192, 132, 252, 0.05);
+        }
+        .tab-btn .icon {
+            margin-right: 6px;
+        }
+
+        /* --- СЧЁТЧИК --- */
+        .counter {
+            text-align: center;
+            font-size: 11px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            flex-shrink: 0;
+            padding: 4px 14px;
+            border-radius: 50px;
+            align-self: center;
+            color: #a78bfa;
+            background: rgba(167, 139, 250, 0.08);
+            border: 1px solid rgba(167, 139, 250, 0.12);
+            backdrop-filter: blur(4px);
+            letter-spacing: 1px;
+        }
+
+        /* --- ФИЛЬТР ПО СТАТУСАМ --- */
+        .filter-container {
+            display: flex;
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 4px;
+            margin-bottom: 12px;
+            flex-shrink: 0;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .filter-btn {
+            flex: 1;
+            padding: 6px 0;
+            border: none;
+            border-radius: 26px;
+            font-size: 11px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s ease;
+            background: transparent;
+            color: #7a8ba8;
+            text-align: center;
+            letter-spacing: 0.3px;
+        }
+        .filter-btn.active {
+            background: rgba(192, 132, 252, 0.15);
+            color: #c084fc;
+            box-shadow: 0 0 30px rgba(192, 132, 252, 0.05);
+        }
+
+        /* --- КНОПКА ДОБАВЛЕНИЯ --- */
+        .add-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            background: rgba(192, 132, 252, 0.12);
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            border-radius: 30px;
+            padding: 6px 16px;
+            font-size: 12px;
+            font-weight: 700;
+            color: #c084fc;
+            cursor: pointer;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+            margin-bottom: 6px;
+            flex-shrink: 0;
+            width: fit-content;
+            align-self: center;
+        }
+        .add-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* --- СПИСОК ИГР (с прокруткой) --- */
+        .games-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding-right: 4px;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            padding-bottom: 4px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .games-scroll::-webkit-scrollbar { width: 3px; }
+        .games-scroll::-webkit-scrollbar-thumb { background: rgba(192, 132, 252, 0.3); border-radius: 10px; }
+
+        /* --- СЕКЦИИ СЕРИЙ --- */
+        .series-section {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .series-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding-bottom: 4px;
+            border-bottom: 1px solid rgba(192, 132, 252, 0.15);
+        }
+        .series-header h2 {
+            font-size: 14px;
+            font-weight: 700;
+            color: #c084fc;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(192, 132, 252, 0.2);
+        }
+        .series-header .line {
+            flex: 1;
+            height: 1px;
+            background: linear-gradient(90deg, rgba(192, 132, 252, 0.3), transparent);
+        }
+        .series-header .count {
+            font-size: 10px;
+            color: #94A3B8;
+            font-weight: 600;
+        }
+
+        /* --- КАРТОЧКИ ИГР (теперь не ссылки) --- */
+        .game-card {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            opacity: 0;
+            transform: translateY(20px) scale(0.95);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+            cursor: pointer;
+        }
+        .game-card.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+        .game-card:active .game-item {
+            transform: scale(0.97);
+            transition: 0.05s;
+        }
+
+        .game-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            transition: 0.2s;
+            border-left: 3px solid #8B5CF6;
+            position: relative;
+            overflow: hidden;
+        }
+        .game-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.05), transparent);
+            pointer-events: none;
+        }
+        .game-item.completed { border-left-color: #34D399; }
+        .game-item.in-progress { border-left-color: #FBBF24; }
+        .game-item.planned { border-left-color: #60A5FA; }
+
+        .game-icon {
+            font-size: 24px;
+            margin-right: 12px;
+            flex-shrink: 0;
+            opacity: 0.9;
+            filter: drop-shadow(0 0 8px rgba(192, 132, 252, 0.2));
+        }
+
+        .game-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .game-info h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: #E2E8F0;
+            letter-spacing: -0.2px;
+        }
+        .game-info .meta {
+            font-size: 10px;
+            font-weight: 500;
+            color: #94A3B8;
+            margin-top: 2px;
+            letter-spacing: 0.3px;
+        }
+        .game-info .meta span {
+            opacity: 0.4;
+            margin: 0 4px;
+        }
+        .game-info .game-progress {
+            font-size: 10px;
+            color: #94A3B8;
+            margin-top: 3px;
+        }
+        .game-info .game-progress .bar-bg {
+            display: inline-block;
+            width: 50px;
+            height: 3px;
+            background: rgba(255,255,255,0.06);
+            border-radius: 4px;
+            margin-left: 6px;
+            vertical-align: middle;
+            overflow: hidden;
+        }
+        .game-info .game-progress .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            background: linear-gradient(90deg, #8B5CF6, #FBBF24);
+        }
+
+        .game-badge {
+            border-radius: 50px;
+            padding: 2px 10px;
+            font-size: 9px;
+            font-weight: 700;
+            text-align: center;
+            white-space: nowrap;
+            flex-shrink: 0;
+            margin-left: 8px;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .game-badge.completed { background: rgba(52, 211, 153, 0.15); color: #34D399; border: 1px solid rgba(52, 211, 153, 0.2); }
+        .game-badge.in-progress { background: rgba(251, 191, 36, 0.15); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.2); animation: pulseBadge 2s ease-in-out infinite; }
+        .game-badge.planned { background: rgba(96, 165, 250, 0.15); color: #60A5FA; border: 1px solid rgba(96, 165, 250, 0.2); }
+        .game-badge:active {
+            transform: scale(0.9);
+        }
+
+        @keyframes pulseBadge {
+            0% { opacity: 0.6; }
+            50% { opacity: 1; }
+            100% { opacity: 0.6; }
+        }
+
+        .game-delete {
+            font-size: 14px;
+            color: rgba(255,255,255,0.15);
+            cursor: pointer;
+            margin-left: 6px;
+            transition: 0.2s;
+            padding: 0 4px;
+            flex-shrink: 0;
+        }
+        .game-delete:active {
+            color: #ef4444;
+            transform: scale(1.2);
+        }
+
+        /* --- МОДАЛКА (общая для добавления и редактирования) --- */
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(8px);
+            z-index: 100;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 35px;
+        }
+        .modal-overlay.open {
+            display: flex;
+        }
+        .modal {
+            background: rgba(20, 16, 40, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(192, 132, 252, 0.2);
+            border-radius: 24px;
+            padding: 24px 20px 20px;
+            width: 100%;
+            max-width: 320px;
+            max-height: 90%;
+            overflow-y: auto;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.8);
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #c084fc;
+            text-align: center;
+            margin-bottom: 16px;
+            text-shadow: 0 0 30px rgba(192, 132, 252, 0.2);
+        }
+        .modal-field {
+            margin-bottom: 12px;
+        }
+        .modal-field label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #94A3B8;
+            margin-bottom: 3px;
+            letter-spacing: 0.5px;
+        }
+        .modal-field input, .modal-field select {
+            width: 100%;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #E2E8F0;
+            font-size: 14px;
+            outline: none;
+            transition: 0.2s;
+        }
+        .modal-field input:focus, .modal-field select:focus {
+            border-color: rgba(192, 132, 252, 0.4);
+            background: rgba(255,255,255,0.08);
+        }
+        .modal-field input::placeholder {
+            color: #4a5568;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+        }
+        .modal-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 16px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            transition: 0.2s;
+            backdrop-filter: blur(4px);
+        }
+        .modal-btn.save {
+            background: rgba(192, 132, 252, 0.15);
+            color: #c084fc;
+            border: 1px solid rgba(192, 132, 252, 0.2);
+        }
+        .modal-btn.save:active {
+            transform: scale(0.95);
+        }
+        .modal-btn.cancel {
+            background: rgba(255,255,255,0.05);
+            color: #7a8ba8;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .modal-btn.cancel:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 380px) {
+            .logo-title { font-size: 28px; }
+            .game-info h3 { font-size: 14px; }
+            .game-item { padding: 8px 12px; }
+            .game-icon { font-size: 20px; margin-right: 8px; }
+            .modal { padding: 20px 16px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-frame">
+    <div class="screen">
+        <!-- Космический фон -->
+        <div class="stars-bg" id="starsBg"></div>
+        <div class="neon-glow"></div>
+
+        <div class="content-wrapper">
+            <!-- Шапка -->
+            <div class="hero-logo">
+                <h1 class="logo-title">🎮 ИГРЫ</h1>
+                <div class="logo-sub">✦ игровой дневник ✦</div>
+            </div>
+
+            <!-- Переключатель -->
+            <div class="tabs-container">
+                <a href="index.html" class="tab-btn">📅 События</a>
+                <a href="games.html" class="tab-btn active">🎮 Игры</a>
+            </div>
+
+            <!-- Счётчик -->
+            <div class="counter" id="counter">⚡ 0 игр</div>
+
+            <!-- Фильтр по статусам -->
+            <div class="filter-container" id="filterContainer">
+                <button class="filter-btn active" data-status="all">Все</button>
+                <button class="filter-btn" data-status="in-progress">В процессе</button>
+                <button class="filter-btn" data-status="completed">Пройдены</button>
+                <button class="filter-btn" data-status="planned">В планах</button>
+            </div>
+
+            <!-- Кнопка добавить -->
+            <div class="add-btn" id="addGameBtn">➕ Добавить игру</div>
+
+            <!-- Список (прокручивается) -->
+            <div class="games-scroll" id="gamesList"></div>
+        </div>
+
+        <!-- Модалка (универсальная) -->
+        <div class="modal-overlay" id="modalOverlay">
+            <div class="modal">
+                <div class="modal-title" id="modalTitle">✨ Добавить игру</div>
+                <div class="modal-field">
+                    <label>Название</label>
+                    <input type="text" id="gameTitle" placeholder="Например: Cyberpunk 2077">
+                </div>
+                <div class="modal-field">
+                    <label>Иконка (эмодзи)</label>
+                    <input type="text" id="gameIcon" placeholder="🤖" value="🎮">
+                </div>
+                <div class="modal-field">
+                    <label>Тип</label>
+                    <input type="text" id="gameType" placeholder="Сюжетная / Экшен" value="Сюжетная / Экшен">
+                </div>
+                <div class="modal-field">
+                    <label>Платформа</label>
+                    <input type="text" id="gamePlatform" placeholder="PC, PS5, Switch..." value="PC">
+                </div>
+                <div class="modal-field">
+                    <label>Статус</label>
+                    <select id="gameStatus">
+                        <option value="in-progress">В процессе</option>
+                        <option value="completed">Пройдена</option>
+                        <option value="planned">В планах</option>
+                    </select>
+                </div>
+                <div class="modal-field">
+                    <label>Прогресс (0–100)</label>
+                    <input type="number" id="gameProgress" min="0" max="100" value="50">
+                </div>
+                <div class="modal-buttons">
+                    <button class="modal-btn cancel" id="cancelModal">Отмена</button>
+                    <button class="modal-btn save" id="saveGame">Сохранить</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ---------- ДАННЫЕ (ДЕФОЛТ) ----------
+    const defaultGames = [
+        // В процессе
+        { id: 'resident-evil-0', title: 'Resident Evil 0', status: 'in-progress', progress: 50, icon: '🧟', type: 'Сюжетная / Хоррор', platform: 'PC' },
+        { id: 'hello-neighbor', title: 'Hello Neighbor', status: 'in-progress', progress: 40, icon: '🏠', type: 'Сюжетная / Головоломка', platform: 'PC' },
+        // GTA
+        { id: 'gta-3', title: 'GTA III', status: 'completed', progress: 100, icon: '🏙️', type: 'Сюжетная / Экшен', platform: 'PC' },
+        { id: 'gta-vc', title: 'GTA: Vice City', status: 'completed', progress: 100, icon: '🌴', type: 'Сюжетная / Экшен', platform: 'PC' },
+        { id: 'gta-sa', title: 'GTA: San Andreas', status: 'completed', progress: 100, icon: '🚗', type: 'Сюжетная / Экшен', platform: 'PC' },
+        { id: 'gta-4', title: 'GTA IV', status: 'completed', progress: 100, icon: '🗽', type: 'Сюжетная / Экшен', platform: 'PC' },
+        { id: 'gta-5', title: 'GTA V', status: 'completed', progress: 100, icon: '💎', type: 'Сюжетная / Экшен', platform: 'PC' },
+        // Mafia
+        { id: 'mafia-1', title: 'Mafia (2002)', status: 'completed', progress: 100, icon: '🚬', type: 'Сюжетная / Криминал', platform: 'PC' },
+        { id: 'mafia-2', title: 'Mafia II', status: 'completed', progress: 100, icon: '🔫', type: 'Сюжетная / Криминал', platform: 'PC' },
+        { id: 'mafia-3', title: 'Mafia III', status: 'completed', progress: 100, icon: '⚜️', type: 'Сюжетная / Криминал', platform: 'PC' },
+        // Metro
+        { id: 'metro-2033', title: 'Metro 2033', status: 'completed', progress: 100, icon: '🚇', type: 'Сюжетная / Постапокалипсис', platform: 'PC' },
+        { id: 'metro-ll', title: 'Metro: Last Light', status: 'completed', progress: 100, icon: '🌌', type: 'Сюжетная / Постапокалипсис', platform: 'PC' },
+        { id: 'metro-exodus', title: 'Metro Exodus', status: 'completed', progress: 100, icon: '🚂', type: 'Сюжетная / Постапокалипсис', platform: 'PC' },
+        // Stalker
+        { id: 'stalker-shoc', title: 'S.T.A.L.K.E.R.: Shadow of Chernobyl', status: 'completed', progress: 100, icon: '☢️', type: 'Сюжетная / Постапокалипсис', platform: 'PC' },
+        { id: 'stalker-cs', title: 'S.T.A.L.K.E.R.: Clear Sky', status: 'completed', progress: 100, icon: '🌩️', type: 'Сюжетная / Постапокалипсис', platform: 'PC' },
+        { id: 'stalker-cop', title: 'S.T.A.L.K.E.R.: Call of Pripyat', status: 'completed', progress: 100, icon: '🔦', type: 'Сюжетная / Постапокалипсис', platform: 'PC' },
+        // Forest
+        { id: 'the-forest', title: 'The Forest', status: 'completed', progress: 100, icon: '🌲', type: 'Сюжетная / Выживание', platform: 'PC' },
+        { id: 'sons-of-the-forest', title: 'Sons of the Forest', status: 'completed', progress: 100, icon: '🪓', type: 'Сюжетная / Выживание', platform: 'PC' },
+        // Others
+        { id: 'quarantine-zone', title: 'Quarantine Zone', status: 'completed', progress: 100, icon: '🧪', type: 'Сюжетная / Хоррор', platform: 'PC' },
+        { id: 'miside', title: 'Miside', status: 'completed', progress: 100, icon: '🌀', type: 'Сюжетная / Психологическая', platform: 'PC' },
+        { id: 'welcome-to-kowloon', title: 'Welcome to Kowloon', status: 'completed', progress: 100, icon: '🏮', type: 'Сюжетная / Приключение', platform: 'PC' },
+        { id: 'contraband-police', title: 'Contraband Police', status: 'completed', progress: 100, icon: '🚔', type: 'Сюжетная / Симулятор', platform: 'PC' },
+        { id: 'supermarket-simulator', title: 'Supermarket Simulator', status: 'completed', progress: 100, icon: '🛒', type: 'Симулятор', platform: 'PC' },
+        { id: 'rest-area-simulator', title: 'Rest Area Simulator', status: 'completed', progress: 100, icon: '🛣️', type: 'Симулятор', platform: 'PC' },
+        { id: 'repo', title: 'REPO', status: 'completed', progress: 100, icon: '📦', type: 'Сюжетная / Головоломка', platform: 'PC' },
+        { id: 'party-animals', title: 'Party Animals', status: 'completed', progress: 100, icon: '🐾', type: 'Сетевая / Казуальная', platform: 'Multi' },
+        { id: 'cs2', title: 'Counter-Strike 2', status: 'completed', progress: 100, icon: '🎯', type: 'Сетевая / Шутер', platform: 'PC' },
+        { id: 'contractville', title: 'ContractVille', status: 'completed', progress: 100, icon: '🏗️', type: 'Сюжетная / Симулятор', platform: 'PC' },
+        { id: 'barglin-gnomes', title: 'Barglin\' Gnomes', status: 'completed', progress: 100, icon: '🧙', type: 'Сюжетная / Приключение', platform: 'PC' },
+        { id: 'the-cell', title: 'Клеть (The Cell)', status: 'completed', progress: 100, icon: '🔒', type: 'Сюжетная / Хоррор', platform: 'PC' }
+    ];
+
+    // ---------- РАБОТА С ХРАНИЛИЩЕМ ----------
+    function loadGames() {
+        const stored = localStorage.getItem('gamesData');
+        if (stored) {
+            try {
+                return JSON.parse(stored);
+            } catch(e) {
+                return defaultGames;
+            }
+        } else {
+            localStorage.setItem('gamesData', JSON.stringify(defaultGames));
+            return defaultGames;
+        }
+    }
+
+    function saveGames(games) {
+        localStorage.setItem('gamesData', JSON.stringify(games));
+    }
+
+    let games = loadGames();
+    let currentStatusFilter = 'all';
+    let editingId = null; // null = добавление, иначе редактирование
+
+    // ---------- ОПРЕДЕЛЕНИЕ СЕРИИ ----------
+    function getSeries(title) {
+        const lower = title.toLowerCase();
+        if (lower.includes('gta')) return 'GTA';
+        if (lower.includes('mafia')) return 'Mafia';
+        if (lower.includes('metro')) return 'Metro';
+        if (lower.includes('stalker') || lower.includes('s.t.a.l.k.e.r')) return 'Stalker';
+        if (lower.includes('the forest') || lower.includes('sons of the forest')) return 'The Forest';
+        if (lower.includes('resident evil')) return 'Resident Evil';
+        if (lower.includes('hello neighbor')) return 'Hello Neighbor';
+        return 'Другое';
+    }
+
+    // ---------- ГЕНЕРАЦИЯ ID ----------
+    function generateId(title) {
+        return title.toLowerCase().replace(/[^a-z0-9]+/g, '-') + '-' + Date.now();
+    }
+
+    // ---------- РЕНДЕР ----------
+    function renderGames() {
+        const listEl = document.getElementById('gamesList');
+        const counterEl = document.getElementById('counter');
+
+        // Фильтр по статусу
+        let filtered = games;
+        if (currentStatusFilter !== 'all') {
+            filtered = filtered.filter(g => g.status === currentStatusFilter);
+        }
+
+        // Сортировка: сначала в процессе, потом пройденные, потом планы
+        const order = { 'in-progress': 0, 'completed': 1, 'planned': 2 };
+        const sorted = [...filtered].sort((a, b) => order[a.status] - order[b.status]);
+
+        // Группировка по сериям
+        const groups = {};
+        sorted.forEach(game => {
+            const series = getSeries(game.title);
+            if (!groups[series]) groups[series] = [];
+            groups[series].push(game);
+        });
+
+        listEl.innerHTML = '';
+        let total = sorted.length;
+
+        const seriesKeys = Object.keys(groups).sort((a, b) => {
+            if (a === 'Другое') return 1;
+            if (b === 'Другое') return -1;
+            return groups[b].length - groups[a].length;
+        });
+
+        if (total === 0) {
+            listEl.innerHTML = `<div style="text-align:center;color:#7a8ba8;padding:30px 0;font-size:14px;">🎯 Нет игр по выбранному фильтру</div>`;
+            counterEl.textContent = `⚡ 0 игр`;
+            return;
+        }
+
+        seriesKeys.forEach(series => {
+            const gamesInSeries = groups[series];
+            const section = document.createElement('div');
+            section.className = 'series-section';
+
+            const header = document.createElement('div');
+            header.className = 'series-header';
+            let icon = '🎮';
+            if (series === 'GTA') icon = '🏙️';
+            else if (series === 'Mafia') icon = '🚬';
+            else if (series === 'Metro') icon = '🚇';
+            else if (series === 'Stalker') icon = '☢️';
+            else if (series === 'The Forest') icon = '🌲';
+            else if (series === 'Resident Evil') icon = '🧟';
+            else if (series === 'Hello Neighbor') icon = '🏠';
+            header.innerHTML = `
+                <span style="font-size:18px;">${icon}</span>
+                <h2>${series}</h2>
+                <span class="line"></span>
+                <span class="count">${gamesInSeries.length}</span>
+            `;
+            section.appendChild(header);
+
+            gamesInSeries.forEach((game, index) => {
+                const badgeMap = {
+                    'completed': { text: 'ПРОЙДЕНА', class: 'completed' },
+                    'in-progress': { text: 'В ПРОЦЕССЕ', class: 'in-progress' },
+                    'planned': { text: 'В ПЛАНАХ', class: 'planned' }
+                };
+                const badge = badgeMap[game.status] || { text: game.status, class: 'planned' };
+
+                // Вместо <a> используем <div> с классом game-card
+                const card = document.createElement('div');
+                card.className = 'game-card show';
+                card.style.transitionDelay = (index * 0.04) + 's';
+                card.dataset.id = game.id;
+
+                const item = document.createElement('div');
+                let cardClass = 'game-item';
+                if (game.status === 'completed') cardClass += ' completed';
+                else if (game.status === 'in-progress') cardClass += ' in-progress';
+                else if (game.status === 'planned') cardClass += ' planned';
+                item.className = cardClass;
+
+                let progressHTML = '';
+                if (game.status === 'in-progress') {
+                    progressHTML = `
+                        <div class="game-progress">
+                            ${game.progress}%
+                            <span class="bar-bg"><span class="bar-fill" style="width:${game.progress}%;"></span></span>
+                        </div>
+                    `;
+                } else if (game.status === 'completed') {
+                    progressHTML = `<div class="game-progress">✅ Пройдена</div>`;
+                } else {
+                    progressHTML = `<div class="game-progress">📅 В планах</div>`;
+                }
+
+                item.innerHTML = `
+                    <div class="game-icon">${game.icon}</div>
+                    <div class="game-info">
+                        <h3>${game.title}</h3>
+                        <div class="meta">${game.type} <span>|</span> ${game.platform}</div>
+                        ${progressHTML}
+                    </div>
+                    <div class="game-badge ${badge.class}" data-status="${game.status}">${badge.text}</div>
+                    <span class="game-delete" data-id="${game.id}">✕</span>
+                `;
+
+                // Клик по карточке → открыть редактирование
+                card.addEventListener('click', function(e) {
+                    // Если кликнули на крестик или бейдж — не открываем редактирование (чтобы не мешать)
+                    if (e.target.classList.contains('game-delete') || e.target.classList.contains('game-badge')) return;
+                    openEditModal(game.id);
+                });
+
+                // Клик по бейджу – быстрое переключение статуса
+                const badgeEl = item.querySelector('.game-badge');
+                badgeEl.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const statuses = ['in-progress', 'completed', 'planned'];
+                    const current = game.status;
+                    let nextIndex = (statuses.indexOf(current) + 1) % statuses.length;
+                    const newStatus = statuses[nextIndex];
+                    // Обновляем игру
+                    const gameToUpdate = games.find(g => g.id === game.id);
+                    if (gameToUpdate) {
+                        gameToUpdate.status = newStatus;
+                        // Если статус меняется на completed, можно прогресс поставить 100, но оставим как есть
+                        saveGames(games);
+                        renderGames();
+                    }
+                });
+
+                // Удаление
+                const deleteBtn = item.querySelector('.game-delete');
+                deleteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    if (confirm(`Удалить игру "${game.title}"?`)) {
+                        games = games.filter(g => g.id !== game.id);
+                        saveGames(games);
+                        renderGames();
+                    }
+                });
+
+                card.appendChild(item);
+                section.appendChild(card);
+            });
+
+            listEl.appendChild(section);
+        });
+
+        counterEl.textContent = `⚡ ${total} игр`;
+    }
+
+    // ---------- МОДАЛЬНОЕ ОКНО (добавление / редактирование) ----------
+    const modalOverlay = document.getElementById('modalOverlay');
+    const addBtn = document.getElementById('addGameBtn');
+    const cancelBtn = document.getElementById('cancelModal');
+    const saveBtn = document.getElementById('saveGame');
+    const modalTitle = document.getElementById('modalTitle');
+
+    function openModal(editId = null) {
+        editingId = editId;
+        if (editingId) {
+            modalTitle.textContent = '✏️ Редактировать игру';
+            const game = games.find(g => g.id === editingId);
+            if (!game) return;
+            document.getElementById('gameTitle').value = game.title;
+            document.getElementById('gameIcon').value = game.icon || '🎮';
+            document.getElementById('gameType').value = game.type || 'Сюжетная / Экшен';
+            document.getElementById('gamePlatform').value = game.platform || 'PC';
+            document.getElementById('gameStatus').value = game.status;
+            document.getElementById('gameProgress').value = game.progress;
+        } else {
+            modalTitle.textContent = '✨ Добавить игру';
+            document.getElementById('gameTitle').value = '';
+            document.getElementById('gameIcon').value = '🎮';
+            document.getElementById('gameType').value = 'Сюжетная / Экшен';
+            document.getElementById('gamePlatform').value = 'PC';
+            document.getElementById('gameStatus').value = 'in-progress';
+            document.getElementById('gameProgress').value = '50';
+        }
+        modalOverlay.classList.add('open');
+        document.getElementById('gameTitle').focus();
+    }
+
+    function closeModal() {
+        modalOverlay.classList.remove('open');
+        editingId = null;
+    }
+
+    addBtn.addEventListener('click', () => openModal(null));
+    cancelBtn.addEventListener('click', closeModal);
+    modalOverlay.addEventListener('click', function(e) {
+        if (e.target === this) closeModal();
+    });
+
+    function openEditModal(id) {
+        openModal(id);
+    }
+
+    saveBtn.addEventListener('click', function() {
+        const title = document.getElementById('gameTitle').value.trim();
+        if (!title) {
+            alert('Введите название игры');
+            return;
+        }
+        const icon = document.getElementById('gameIcon').value.trim() || '🎮';
+        const type = document.getElementById('gameType').value.trim() || 'Сюжетная / Экшен';
+        const platform = document.getElementById('gamePlatform').value.trim() || 'PC';
+        const status = document.getElementById('gameStatus').value;
+        const progress = Math.min(100, Math.max(0, parseInt(document.getElementById('gameProgress').value) || 0));
+
+        if (editingId) {
+            // Редактирование существующей
+            const game = games.find(g => g.id === editingId);
+            if (game) {
+                game.title = title;
+                game.icon = icon;
+                game.type = type;
+                game.platform = platform;
+                game.status = status;
+                game.progress = progress;
+                saveGames(games);
+                renderGames();
+                closeModal();
+            }
+        } else {
+            // Добавление новой
+            const newGame = {
+                id: generateId(title),
+                title: title,
+                status: status,
+                progress: progress,
+                icon: icon,
+                type: type,
+                platform: platform
+            };
+            games.push(newGame);
+            saveGames(games);
+            renderGames();
+            closeModal();
+        }
+    });
+
+    // ---------- ФИЛЬТР ----------
+    function initFilter() {
+        const filterBtns = document.querySelectorAll('.filter-btn');
+        filterBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                filterBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                currentStatusFilter = this.dataset.status;
+                renderGames();
+            });
+        });
+    }
+
+    // ---------- ЗВЁЗДЫ ----------
+    function createStars() {
+        const container = document.getElementById('starsBg');
+        const count = 60;
+        for (let i = 0; i < count; i++) {
+            const star = document.createElement('div');
+            star.className = 'star-particle';
+            const size = Math.random() * 2.5 + 0.5;
+            star.style.width = size + 'px';
+            star.style.height = size + 'px';
+            star.style.left = Math.random() * 100 + '%';
+            star.style.top = Math.random() * 100 + '%';
+            star.style.animationDelay = (Math.random() * 4) + 's';
+            star.style.animationDuration = (2 + Math.random() * 3) + 's';
+            container.appendChild(star);
+        }
+    }
+
+    // ---------- ЗАПУСК ----------
+    document.addEventListener('DOMContentLoaded', () => {
+        createStars();
+        renderGames();
+        initFilter();
+    });
+</script>
+</body>
+</html>
