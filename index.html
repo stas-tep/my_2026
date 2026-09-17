@@ -1,90 +1,141 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Лето 2026 – События</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>☀️</text></svg>">
-    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes, viewport-fit=cover">
+    <title>Осень | 2026</title>
+    
+    <link rel="icon" type="image/png" sizes="512x512" href="favicon.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="favicon.png">
+    
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            background: #e0e5ec;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            padding: 20px;
+            transition: background 0.5s ease;
+        }
+
+        /* ===== СЕЗОННЫЕ ТЕМЫ ===== */
+        body[data-season="all"] {
+            background: linear-gradient(145deg, #1a0f0a 0%, #3a2018 35%, #6a3a20 70%, #a05a2a 100%);
+            --accent: #D2691E;
+            --accent-dark: #B8501A;
+            --accent-deep: #8B3A1A;
+            --accent-light: #E88A2A;
+            --text-main: #FFF5E0;
+            --text-soft: rgba(255,235,200,0.85);
+            --text-dim: rgba(255,235,200,0.5);
+            --card-bg: rgba(255,235,200,0.08);
+            --card-border: rgba(255,210,120,0.2);
+            --card-shadow: rgba(0,0,0,0.2);
+            --title-grad-1: #FFF5E0;
+            --title-grad-2: #FFD27A;
+            --title-grad-3: #D2691E;
+            --year-color: #FFD27A;
+            --pill-bg: rgba(255,240,210,0.95);
+            --pill-text: #7a2e0a;
+            --pill-year: #B8501A;
+            --badge-bg: #D2691E;
+        }
+        body[data-season="spring"] {
+            background: linear-gradient(145deg, #3a1530 0%, #7a2e5a 35%, #c2558a 70%, #e88aa8 100%);
+            --accent: #FF6B9D;
+            --accent-dark: #E84A7A;
+            --accent-deep: #B82E5A;
+            --accent-light: #FF8FB1;
+            --text-main: #FFF0F5;
+            --text-soft: rgba(255,220,235,0.9);
+            --text-dim: rgba(255,220,235,0.55);
+            --card-bg: rgba(255,220,235,0.1);
+            --card-border: rgba(255,150,190,0.28);
+            --card-shadow: rgba(0,0,0,0.2);
+            --title-grad-1: #FFFFFF;
+            --title-grad-2: #FFC0D0;
+            --title-grad-3: #FF6B9D;
+            --year-color: #FFC0D0;
+            --pill-bg: rgba(255,235,242,0.95);
+            --pill-text: #7a1a3a;
+            --pill-year: #B82E5A;
+            --badge-bg: #FF6B9D;
+        }
+        body[data-season="summer"] {
+            background: linear-gradient(145deg, #0a2a4a 0%, #1a5a8b 35%, #3a8ac2 70%, #6ac2e8 100%);
+            --accent: #FFAA00;
+            --accent-dark: #E88A00;
+            --accent-deep: #B86A00;
+            --accent-light: #FFD700;
+            --text-main: #FFFFFF;
+            --text-soft: rgba(220,240,255,0.92);
+            --text-dim: rgba(220,240,255,0.55);
+            --card-bg: rgba(200,235,255,0.1);
+            --card-border: rgba(150,220,255,0.3);
+            --card-shadow: rgba(0,0,0,0.2);
+            --title-grad-1: #FFFFFF;
+            --title-grad-2: #FFE884;
+            --title-grad-3: #FFAA00;
+            --year-color: #FFE884;
+            --pill-bg: rgba(255,250,220,0.95);
+            --pill-text: #7a4a0a;
+            --pill-year: #B86A00;
+            --badge-bg: #FFAA00;
+        }
+        body[data-season="autumn"] {
+            background: linear-gradient(145deg, #4a1f0a 0%, #8b3a1a 35%, #c25e1c 70%, #e88a2a 100%);
+            --accent: #E88A2A;
+            --accent-dark: #D2691E;
+            --accent-deep: #8B3A1A;
+            --accent-light: #FFB347;
+            --text-main: #FFF5E0;
+            --text-soft: rgba(255,235,200,0.85);
+            --text-dim: rgba(255,235,200,0.5);
+            --card-bg: rgba(255,235,200,0.1);
+            --card-border: rgba(255,210,120,0.22);
+            --card-shadow: rgba(0,0,0,0.15);
+            --title-grad-1: #FFF5E0;
+            --title-grad-2: #FFD27A;
+            --title-grad-3: #E88A2A;
+            --year-color: #FFD27A;
+            --pill-bg: rgba(255,240,210,0.95);
+            --pill-text: #7a2e0a;
+            --pill-year: #B8501A;
+            --badge-bg: #E88A2A;
         }
 
         .phone-frame {
-            max-width: 375px;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.25);
-            border-radius: 45px;
-            padding: 12px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
-            margin: 20px auto;
+            width: 375px;
             height: 812px;
+            background: rgba(255,245,224,0.05);
+            border-radius: 44px;
+            box-shadow: 0 0 0 3px rgba(255,200,120,0.28), 0 20px 40px rgba(0,0,0,0.5);
             position: relative;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
+            z-index: 10;
+            -webkit-overflow-scrolling: touch;
         }
-        @media (max-width: 450px) {
-            .phone-frame {
-                max-width: 100%;
-                border: none;
-                border-radius: 0;
-                padding: 0;
-                box-shadow: none;
-                margin: 0;
-                height: 100vh;
-                background: transparent;
-                backdrop-filter: none;
-            }
-            .screen {
-                border-radius: 0 !important;
-                height: 100vh !important;
-            }
-        }
+
+        .phone-frame::-webkit-scrollbar { display: none; }
+        .phone-frame { -ms-overflow-style: none; scrollbar-width: none; }
 
         .screen {
-            border-radius: 35px;
-            height: 100%;
-            width: 100%;
+            padding: 16px;
+            min-height: 100%;
             position: relative;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-            background: linear-gradient(180deg, #DDF4FF 0%, #A9E0F5 100%);
+            z-index: 2;
+            padding-bottom: 40px;
         }
 
-        .screen.glass-fade {
-            background: rgba(255, 255, 255, 0.3) !important;
-            backdrop-filter: blur(30px) !important;
-        }
-        .glass-fade .cloud-container {
-            opacity: 0 !important;
-            transition: opacity 0.8s ease;
-        }
-        .glass-fade .hero-logo,
-        .glass-fade .season-scale,
-        .glass-fade .counter,
-        .glass-fade .events-list,
-        .glass-fade .tabs-container {
-            opacity: 0 !important;
-            filter: blur(15px) !important;
-            transform: scale(0.92) !important;
-            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1) !important;
-            pointer-events: none !important;
-        }
-
-        /* Облака */
-        .cloud-container {
+        /* ===== ФОН С ЭМОДЗИ ===== */
+        .inner-bg {
             position: absolute;
             top: 0;
             left: 0;
@@ -93,409 +144,526 @@
             z-index: 0;
             pointer-events: none;
             overflow: hidden;
-            border-radius: inherit;
-            transition: opacity 0.8s ease;
+            border-radius: 44px;
         }
-        .cloud {
+        .inner-bg .bg-emoji {
             position: absolute;
-            background: #ffffff;
-            border-radius: 50%;
-            opacity: 0.85;
-            filter: blur(1.5px);
+            opacity: 0.32;
+            transition: opacity 0.4s ease, transform 0.4s ease;
         }
-        .cloud-1 {
-            width: 200px;
-            height: 60px;
-            top: 10%;
-            left: -20px;
-            box-shadow: 40px -30px 0 10px #fff, 90px -50px 0 30px #fff, 150px -20px 0 5px #fff;
+        .inner-bg .emoji-1 { bottom: 15%; right: 5%; font-size: 52px; transform: rotate(-15deg); }
+        .inner-bg .emoji-2 { top: 20%; left: 3%; font-size: 48px; transform: rotate(10deg); }
+        .inner-bg .emoji-3 { top: 45%; right: 2%; font-size: 45px; transform: rotate(5deg); }
+        .inner-bg .emoji-4 { bottom: 30%; left: 2%; font-size: 50px; transform: rotate(-8deg); }
+        .inner-bg .emoji-5 { top: 60%; right: 8%; font-size: 42px; transform: rotate(12deg); }
+        .inner-bg .emoji-6 { top: 75%; left: 8%; font-size: 44px; transform: rotate(-5deg); }
+        .inner-bg .emoji-7 { top: 10%; right: 12%; font-size: 40px; transform: rotate(20deg); }
+        .inner-bg .emoji-8 { bottom: 50%; left: 12%; font-size: 40px; transform: rotate(-25deg); }
+        .inner-bg .emoji-center-1 { top: 35%; left: 25%; font-size: 38px; transform: rotate(-10deg); opacity: 0.25; }
+        .inner-bg .emoji-center-2 { top: 50%; right: 25%; font-size: 36px; transform: rotate(15deg); opacity: 0.25; }
+        .inner-bg .emoji-center-3 { top: 65%; left: 35%; font-size: 34px; transform: rotate(-5deg); opacity: 0.25; }
+        .inner-bg .emoji-center-4 { top: 25%; right: 35%; font-size: 35px; transform: rotate(8deg); opacity: 0.25; }
+
+        .falling-leaf {
+            position: absolute;
+            font-size: 18px;
+            opacity: 0.4;
+            animation: fallLeaf 12s linear infinite;
+            pointer-events: none;
         }
-        .cloud-2 {
-            width: 240px;
-            height: 50px;
-            bottom: 20%;
-            right: -30px;
-            box-shadow: -40px -30px 0 15px #fff, -100px -50px 0 25px #fff, -160px -10px 0 10px #fff;
-        }
-        .cloud-3 {
-            width: 160px;
-            height: 40px;
-            top: 80%;
-            left: 20px;
-            box-shadow: -30px -20px 0 8px #fff, -80px -40px 0 15px #fff;
-            opacity: 0.6;
+        @keyframes fallLeaf {
+            0% { transform: translateY(-40px) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.5; }
+            90% { opacity: 0.5; }
+            100% { transform: translateY(900px) rotate(360deg); opacity: 0; }
         }
 
-        .content-wrapper {
-            position: relative;
-            z-index: 10;
-            padding: 25px 20px 20px 20px;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
+        /* ===== ШАПКА ===== */
+        .sticky-header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            margin-bottom: 20px;
+            padding-top: 4px;
         }
-
-        /* Шапка */
-        .hero-logo {
-            text-align: center;
-            margin-bottom: 12px;
-            flex-shrink: 0;
-            transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
-        }
-        .logo-title {
-            font-size: 40px;
-            line-height: 1;
-            font-weight: 900;
-            letter-spacing: -1px;
-            color: #1E3A5F;
-            text-shadow: 0 4px 15px rgba(255, 255, 255, 0.6);
-        }
-        .logo-sub {
-            font-size: 13px;
-            font-weight: 600;
-            margin-top: 2px;
-            color: #5A7D9A;
-        }
-
-        /* === ПЕРЕКЛЮЧАТЕЛЬ ВВЕРХУ === */
-        .tabs-container {
-            display: flex;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-            border-radius: 30px;
-            padding: 4px;
-            margin-bottom: 14px;
-            flex-shrink: 0;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
-        }
-        .tab-btn {
-            flex: 1;
-            padding: 8px 0;
-            border: none;
-            border-radius: 26px;
-            font-size: 14px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s ease;
-            background: transparent;
-            color: #5A7D9A;
-            text-align: center;
-            text-decoration: none;
-            display: block;
-        }
-        .tab-btn.active {
-            background: rgba(255, 255, 255, 0.6);
-            color: #1E3A5F;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-        }
-        .tab-btn .icon {
-            margin-right: 6px;
-        }
-
-        /* Стеклянная шкала */
-        .season-scale {
-            flex-shrink: 0;
-            margin-bottom: 16px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-            border-radius: 30px;
-            padding: 14px 18px 16px 18px;
-            border: 1px solid rgba(255, 255, 255, 0.35);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
-        }
-        .scale-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .scale-header .label {
+        .header-bar {
+            background: var(--card-bg);
+            backdrop-filter: blur(14px);
+            border-radius: 18px;
+            padding: 6px;
             display: flex;
             align-items: center;
             gap: 6px;
-            font-size: 12px;
-            font-weight: 700;
-            transition: all 0.3s;
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 14px var(--card-shadow);
+            transition: background 0.4s, border 0.4s;
         }
-        .scale-header .label.spring-label { color: #66BB6A; }
-        .scale-header .label.spring-label.active { color: #2E7D32; transform: scale(1.05); }
-        .scale-header .label.summer-label { color: #FFA726; }
-        .scale-header .label.summer-label.active { color: #E67E22; transform: scale(1.05); }
-        .scale-header .label .icon { font-size: 16px; }
-        .scale-header .season-indicator {
-            font-size: 11px;
-            font-weight: 700;
-            color: #1E3A5F;
-            background: rgba(255, 255, 255, 0.3);
-            padding: 2px 12px;
-            border-radius: 20px;
-            opacity: 0.7;
-            transition: all 0.3s;
-        }
-        .scale-header .season-indicator.active { opacity: 1; background: rgba(255, 255, 255, 0.5); }
-        .scale-track-wrap { position: relative; padding: 0 4px; }
-        .scale-track {
+
+        .dropdown-stages {
             position: relative;
-            height: 8px;
-            background: rgba(255, 255, 255, 0.25);
-            border-radius: 10px;
-            overflow: visible;
-            cursor: pointer;
-            box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+            z-index: 200;
+            flex: 1;
+            min-width: 0;
         }
-        .scale-track-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            height: 100%;
+        .dropdown-btn {
             width: 100%;
-            border-radius: 10px;
-            background: linear-gradient(90deg, rgba(102, 187, 106, 0.15), rgba(255, 167, 38, 0.15));
+            background: var(--pill-bg);
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 13px;
+            padding: 6px 10px 6px 6px;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--pill-text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+            box-shadow: inset 0 1px 0 rgba(255,255,255,0.6);
         }
-        .scale-fill {
-            height: 100%;
-            width: 50%;
-            background: linear-gradient(90deg, #66BB6A, #FFA726);
-            border-radius: 10px;
-            transition: width 0.35s cubic-bezier(0.2, 0.9, 0.4, 1);
-            position: relative;
-            box-shadow: 0 1px 6px rgba(255, 167, 38, 0.2);
+        .dropdown-btn:hover {
+            transform: translateY(-1px);
         }
-        .scale-handle {
-            position: absolute;
-            top: 50%;
-            width: 24px;
-            height: 24px;
-            background: white;
-            border-radius: 50%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15), 0 0 0 3px rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: left 0.35s cubic-bezier(0.2, 0.9, 0.4, 1);
-            pointer-events: none;
+        .season-icon-badge {
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 12px;
-            z-index: 2;
-            border: 2px solid rgba(255, 255, 255, 0.8);
+            width: 30px;
+            height: 30px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent-light), var(--accent));
+            font-size: 15px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+            transition: background 0.3s;
         }
-        .scale-handle.spring-handle { background: linear-gradient(135deg, #A5D6A7, #66BB6A); }
-        .scale-handle.summer-handle { background: linear-gradient(135deg, #FFE082, #FFA726); }
-        .scale-handle.mixed-handle { background: linear-gradient(135deg, #A5D6A7, #FFE082); }
-        .scale-labels {
+        .season-text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1;
+            flex: 1;
+            min-width: 0;
+        }
+        .season-name {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--pill-text);
+            letter-spacing: 0.2px;
+        }
+        .season-year {
+            font-size: 9px;
+            font-weight: 600;
+            color: var(--pill-year);
+            margin-top: 2px;
+            letter-spacing: 0.4px;
+        }
+        .dropdown-btn .arrow {
+            font-size: 9px;
+            color: var(--pill-year);
+            transition: transform 0.2s;
+            flex-shrink: 0;
+        }
+        .dropdown-stages.open .dropdown-btn .arrow {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: calc(100% + 6px);
+            left: 0;
+            right: 0;
+            background: rgba(255,245,225,0.98);
+            backdrop-filter: blur(16px);
+            border-radius: 18px;
+            border: 1px solid rgba(194,94,28,0.35);
+            overflow: hidden;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px) scale(0.98);
+            transition: 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 300;
+            box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+        }
+        .dropdown-stages.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0) scale(1);
+        }
+        .stage-item {
+            padding: 11px 14px;
+            cursor: pointer;
             display: flex;
             justify-content: space-between;
-            margin-top: 8px;
-            padding: 0 4px;
+            align-items: center;
+            transition: 0.15s;
+            border-bottom: 1px solid rgba(194,94,28,0.08);
         }
-        .scale-labels span {
-            font-size: 11px;
-            font-weight: 600;
-            color: #5A7D9A;
-            opacity: 0.5;
-            transition: all 0.3s;
+        .stage-item:last-child { border-bottom: none; }
+        .stage-item:hover:not(.disabled) {
+            background: rgba(232,138,42,0.1);
+        }
+        .stage-item.active {
+            background: linear-gradient(90deg, rgba(232,138,42,0.2), rgba(232,138,42,0.03));
+            border-left: 3px solid var(--accent);
+        }
+        .stage-item .stage-name-drop {
+            font-weight: 700;
+            color: #4a1f0a;
+            font-size: 13px;
+        }
+        .stage-item.active .stage-name-drop {
+            color: #B8501A;
+            font-weight: 800;
+        }
+        .stage-item .stage-date-drop {
+            font-size: 10px;
+            color: #c25e1c;
+            font-weight: 700;
+            background: rgba(232,138,42,0.15);
+            padding: 2px 8px;
+            border-radius: 10px;
+            min-width: 22px;
+            text-align: center;
+        }
+        .stage-item.active .stage-date-drop {
+            background: var(--accent);
+            color: #fff;
+        }
+
+        /* ===== НЕДОСТУПНЫЙ СЕЗОН (ЗИМА) ===== */
+        .stage-item.disabled {
+            cursor: not-allowed;
+            opacity: 0.45;
+            position: relative;
+            pointer-events: none;
+        }
+        .stage-item.disabled .stage-name-drop {
+            color: #8a8a8a;
+        }
+        .stage-item.disabled .stage-date-drop {
+            background: rgba(150,150,150,0.2);
+            color: #8a8a8a;
+            font-size: 9px;
+            letter-spacing: 0.3px;
+        }
+
+        /* ===== ЛОГО В КВАДРАТИКЕ ===== */
+        .logo-badge {
+            background: linear-gradient(135deg, var(--accent-light) 0%, var(--accent-dark) 100%);
+            border: 1px solid rgba(255,220,150,0.25);
+            border-radius: 13px;
+            width: 42px;
+            height: 42px;
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
             display: flex;
             align-items: center;
-            gap: 4px;
+            justify-content: center;
+            flex-shrink: 0;
+            user-select: none;
+            box-shadow: 
+                0 3px 8px rgba(0,0,0,0.2),
+                inset 0 1px 0 rgba(255,220,150,0.3);
+            transition: background 0.3s;
+            letter-spacing: -0.5px;
+            font-family: 'Inter', sans-serif;
         }
-        .scale-labels span.active { opacity: 1; color: #1E3A5F; transform: scale(1.05); }
-        .scale-labels span .dot {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            transition: all 0.3s;
-        }
-        .scale-labels span .dot.spring-dot { background: #66BB6A; }
-        .scale-labels span .dot.summer-dot { background: #FFA726; }
-        .scale-labels span.active .dot { transform: scale(1.3); box-shadow: 0 0 8px rgba(255, 167, 38, 0.3); }
 
-        /* Счётчик */
+        /* ===== HERO ЗАГОЛОВОК ===== */
+        .hero-title {
+            text-align: center;
+            margin-bottom: 16px;
+            position: relative;
+            z-index: 5;
+            transform: rotate(-2deg);
+        }
+        .hero-title h1 {
+            font-size: 54px;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--title-grad-1), var(--title-grad-2), var(--title-grad-3));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            letter-spacing: -1px;
+            transform: skewX(-3deg);
+            text-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            transition: filter 0.4s;
+        }
+        .year-box {
+            display: inline-block;
+            margin-top: 5px;
+            padding: 5px 20px;
+            border: 2px solid var(--accent);
+            border-radius: 40px;
+            font-size: 17px;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(20,8,2,0.45);
+            transform: rotate(1deg);
+            letter-spacing: 1px;
+            transition: border-color 0.4s;
+        }
+
+        /* ===== ПРИВЕТСТВЕННАЯ ПЛАШКА ===== */
+        .welcome-banner {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 22px;
+            padding: 14px 18px;
+            margin: 0 0 18px;
+            text-align: center;
+            backdrop-filter: blur(8px);
+            transition: background 0.4s, border 0.4s;
+        }
+        .welcome-banner .main-text {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--year-color);
+            letter-spacing: 0.4px;
+            transition: color 0.4s;
+        }
+        .welcome-banner .sub-text {
+            font-size: 12px;
+            color: var(--text-soft);
+            margin-top: 5px;
+            line-height: 1.5;
+            transition: color 0.4s;
+        }
+
+        /* ===== СЧЁТЧИК ===== */
         .counter {
             text-align: center;
             font-size: 12px;
             font-weight: 600;
-            margin-bottom: 12px;
-            flex-shrink: 0;
-            padding: 4px 14px;
+            margin: 0 auto 14px;
+            padding: 5px 16px;
             border-radius: 50px;
-            align-self: center;
-            color: #5A7D9A;
-            background: rgba(255, 255, 255, 0.25);
+            color: var(--year-color);
+            background: rgba(20,8,2,0.4);
+            border: 1px solid var(--card-border);
+            width: fit-content;
             backdrop-filter: blur(4px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
+            transition: color 0.4s, border-color 0.4s;
         }
 
-        /* Список событий */
+        /* ===== СПИСОК СОБЫТИЙ ===== */
         .events-list {
-            flex: 1;
-            overflow-y: auto;
-            padding-right: 4px;
-            min-height: 0;
             display: flex;
             flex-direction: column;
-            gap: 10px;
-            padding-bottom: 4px;
-            transition: opacity 0.8s ease, filter 0.8s ease, transform 0.8s ease;
+            gap: 12px;
+            position: relative;
+            z-index: 5;
         }
-        .events-list::-webkit-scrollbar { width: 3px; }
-        .events-list::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.4); border-radius: 10px; }
-
         .event-item-link {
             display: block;
             text-decoration: none;
             color: inherit;
             opacity: 0;
-            transform: translateY(12px);
-            transition: opacity 0.4s ease, transform 0.4s ease;
+            transform: translateY(14px);
+            transition: opacity 0.45s ease, transform 0.45s ease;
         }
         .event-item-link.show {
             opacity: 1;
             transform: translateY(0);
+        }
+        .event-item-link:active .event-item {
+            transform: scale(0.97);
+            transition: 0.1s;
         }
 
         .event-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 12px 16px;
-            border-radius: 16px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(8px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-            transition: 0.15s;
-            border-left: 4px solid #66BB6A;
+            padding: 13px 16px;
+            border-radius: 18px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
+            box-shadow: 0 4px 14px var(--card-shadow);
+            transition: 0.2s, background 0.4s, border 0.4s;
+            border-left: 4px solid var(--accent);
         }
-        .event-item.summer-card { border-left-color: #FFA726; background: rgba(255, 200, 0, 0.12); }
-        .event-item.spring-card { border-left-color: #66BB6A; background: rgba(76, 175, 80, 0.10); }
-        .event-item.neutral-card { border-left-color: #90A4AE; background: rgba(255, 255, 255, 0.15); }
-
-        .event-item-link:active .event-item { transform: scale(0.96); transition: 0.08s; }
 
         .event-icon {
             font-size: 26px;
             margin-right: 12px;
             flex-shrink: 0;
-            opacity: 0.8;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.2));
         }
-
         .event-info {
             flex: 1;
             min-width: 0;
         }
         .event-info h2 {
-            font-size: 17px;
+            font-size: 16px;
             font-weight: 800;
-            color: #1E3A5F;
+            color: var(--text-main);
             letter-spacing: -0.3px;
+            transition: color 0.4s;
         }
         .event-info .meta {
             font-size: 11px;
             font-weight: 600;
-            color: #5A7D9A;
-            margin-top: 2px;
+            color: var(--text-soft);
+            margin-top: 3px;
+            transition: color 0.4s;
         }
         .event-info .meta span {
             font-weight: 300;
-            opacity: 0.6;
+            opacity: 0.5;
             margin: 0 3px;
         }
 
         .event-badge {
             border-radius: 50px;
-            padding: 3px 12px;
-            font-size: 10px;
-            font-weight: 700;
+            padding: 4px 11px;
+            font-size: 9px;
+            font-weight: 800;
             text-align: center;
             white-space: nowrap;
             flex-shrink: 0;
             margin-left: 8px;
-            transition: all 0.3s ease;
+            letter-spacing: 0.4px;
         }
-        .event-badge.past { background: rgba(255, 255, 255, 0.4); color: #5A7D9A; border: 1px solid rgba(255, 255, 255, 0.3); }
-        .event-badge.soon { background: #FF006F; color: #FFFFFF; box-shadow: 0 4px 12px rgba(255, 0, 111, 0.25); }
-        .event-badge.process { background: #FF8C00; color: #FFFFFF; animation: pulseProcess 1.8s ease-in-out infinite; }
+        .event-badge.past {
+            background: rgba(255,235,200,0.12);
+            color: var(--text-dim);
+            border: 1px solid var(--card-border);
+        }
+        .event-badge.soon {
+            background: var(--badge-bg);
+            color: #fff;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.2);
+        }
+        .event-badge.process {
+            background: var(--accent-dark);
+            color: #fff;
+            animation: pulseBadge 1.8s ease-in-out infinite;
+        }
+        @keyframes pulseBadge {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.07); }
+            100% { transform: scale(1); }
+        }
 
-        @keyframes pulseProcess {
-            0% { transform: scale(1); box-shadow: 0 0 8px rgba(255, 140, 0, 0.4); }
-            50% { transform: scale(1.06); box-shadow: 0 0 20px rgba(255, 140, 0, 0.7); }
-            100% { transform: scale(1); box-shadow: 0 0 8px rgba(255, 140, 0, 0.4); }
+        /* Пустое состояние */
+        .empty-state {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-dim);
+            font-size: 13px;
+        }
+        .empty-state .empty-icon {
+            font-size: 44px;
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+        .empty-state .empty-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--text-soft);
+            margin-bottom: 4px;
+        }
+
+        /* ===== ПОДВАЛ ===== */
+        .footer-note {
+            text-align: center;
+            font-size: 10px;
+            color: var(--text-dim);
+            margin-top: 30px;
+            letter-spacing: 1px;
+            transition: color 0.4s;
         }
 
         @media (max-width: 380px) {
-            .logo-title { font-size: 32px; }
+            .hero-title h1 { font-size: 44px; }
             .event-info h2 { font-size: 15px; }
-            .event-item { padding: 10px 14px; }
-            .event-icon { font-size: 22px; margin-right: 8px; }
-            .scale-header .label { font-size: 10px; }
-            .scale-handle { width: 20px; height: 20px; font-size: 10px; }
+            .event-item { padding: 12px 14px; }
+            .event-icon { font-size: 22px; margin-right: 10px; }
+            .season-name { font-size: 12px; }
         }
     </style>
 </head>
-<body>
+<body data-season="all">
 
-<div class="phone-frame">
-    <div class="screen" id="screen">
-        <div class="cloud-container" id="cloudContainer">
-            <div class="cloud cloud-1"></div>
-            <div class="cloud cloud-2"></div>
-            <div class="cloud cloud-3"></div>
+<div class="phone-frame" id="phoneFrame">
+    <!-- Фон с эмодзи -->
+    <div class="inner-bg">
+        <div class="bg-emoji emoji-1"></div>
+        <div class="bg-emoji emoji-2"></div>
+        <div class="bg-emoji emoji-3"></div>
+        <div class="bg-emoji emoji-4"></div>
+        <div class="bg-emoji emoji-5"></div>
+        <div class="bg-emoji emoji-6"></div>
+        <div class="bg-emoji emoji-7"></div>
+        <div class="bg-emoji emoji-8"></div>
+        <div class="bg-emoji emoji-center-1"></div>
+        <div class="bg-emoji emoji-center-2"></div>
+        <div class="bg-emoji emoji-center-3"></div>
+        <div class="bg-emoji emoji-center-4"></div>
+
+        <div class="falling-leaf" style="left:10%; animation-delay:0s;"></div>
+        <div class="falling-leaf" style="left:30%; animation-delay:3s;"></div>
+        <div class="falling-leaf" style="left:55%; animation-delay:6s;"></div>
+        <div class="falling-leaf" style="left:75%; animation-delay:1.5s;"></div>
+        <div class="falling-leaf" style="left:90%; animation-delay:4.5s;"></div>
+    </div>
+
+    <div class="screen">
+        <!-- ШАПКА -->
+        <div class="sticky-header">
+            <div class="header-bar">
+                <div class="dropdown-stages" id="dropdownStages">
+                    <div class="dropdown-btn" id="dropdownBtn">
+                        <span class="season-icon-badge" id="seasonIcon">✨</span>
+                        <span class="season-text">
+                            <span class="season-name" id="seasonName">Все события</span>
+                            <span class="season-year" id="seasonYear">2026 · 7 записей</span>
+                        </span>
+                        <span class="arrow">▼</span>
+                    </div>
+                    <div class="dropdown-menu" id="dropdownMenu">
+                        <div class="stage-item active" data-season="all"><span class="stage-name-drop">✨ Все события</span><span class="stage-date-drop" data-count>7</span></div>
+                        <div class="stage-item" data-season="spring"><span class="stage-name-drop">🌸 Весна</span><span class="stage-date-drop" data-count>0</span></div>
+                        <div class="stage-item" data-season="summer"><span class="stage-name-drop">☀️ Лето</span><span class="stage-date-drop" data-count>0</span></div>
+                        <div class="stage-item" data-season="autumn"><span class="stage-name-drop">🍁 Осень</span><span class="stage-date-drop" data-count>0</span></div>
+                        <div class="stage-item disabled" data-season="winter" aria-disabled="true"><span class="stage-name-drop">❄️ Зима</span><span class="stage-date-drop">🔒</span></div>
+                    </div>
+                </div>
+                <!-- Лого в квадратике -->
+                <div class="logo-badge" aria-label="Логотип">К</div>
+            </div>
         </div>
 
-        <div class="content-wrapper" id="contentWrapper">
-            <!-- Шапка -->
-            <div class="hero-logo" id="heroLogo">
-                <h1 class="logo-title">ЛЕТО 2026</h1>
-                <div class="logo-sub">☀️ Сезон отпусков</div>
-            </div>
-
-            <!-- === ПЕРЕКЛЮЧАТЕЛЬ ВВЕРХУ === -->
-            <div class="tabs-container" id="tabsContainer">
-                <a href="index.html" class="tab-btn active" id="tabEvents">📅 События</a>
-                <a href="games.html" class="tab-btn" id="tabGames">🎮 Игры</a>
-            </div>
-
-            <!-- Стеклянная шкала -->
-            <div class="season-scale" id="seasonScale">
-                <div class="scale-header">
-                    <div class="label spring-label active" id="springLabel">
-                        <span class="icon">🌸</span> Весна
-                    </div>
-                    <div class="season-indicator" id="seasonIndicator">🌿 Все события</div>
-                    <div class="label summer-label" id="summerLabel">
-                        Лето <span class="icon">☀️</span>
-                    </div>
-                </div>
-                <div class="scale-track-wrap">
-                    <div class="scale-track" id="scaleTrack">
-                        <div class="scale-track-bg"></div>
-                        <div class="scale-fill" id="scaleFill"></div>
-                        <div class="scale-handle mixed-handle" id="scaleHandle">🌿</div>
-                    </div>
-                </div>
-                <div class="scale-labels">
-                    <span class="active" id="labelSpring"><span class="dot spring-dot"></span> Весна</span>
-                    <span id="labelAll"><span class="dot" style="background:linear-gradient(90deg,#66BB6A,#FFA726);"></span> Все</span>
-                    <span id="labelSummer">Лето <span class="dot summer-dot"></span></span>
-                </div>
-            </div>
-
-            <!-- Счётчик -->
-            <div class="counter" id="counter">🌿 7 событий</div>
-
-            <!-- Список -->
-            <div class="events-list" id="eventList"></div>
+        <!-- HERO ЗАГОЛОВОК -->
+        <div class="hero-title">
+            <h1 id="heroTitle">Дневник</h1>
+            <div class="year-box" id="yearBox">✨ 2026</div>
         </div>
+
+        <!-- ПРИВЕТСТВЕННАЯ ПЛАШКА -->
+        <div class="welcome-banner">
+            <div class="main-text" id="welcomeTitle">✨ Все события 2026</div>
+            <div class="sub-text" id="welcomeSub">Все самые яркие моменты года в одном месте</div>
+        </div>
+
+        <!-- СЧЁТЧИК -->
+        <div class="counter" id="counter">✨ 7 событий</div>
+
+        <!-- СПИСОК СОБЫТИЙ -->
+        <div class="events-list" id="eventList"></div>
+
+        <div class="footer-note" id="footerNote">🍁 Дневник · 2026 🍂</div>
     </div>
 </div>
 
 <script>
-    // ---------- ДАННЫЕ СОБЫТИЙ ----------
-    const eventsData = [
+    // ---------- ВСЕ СОБЫТИЯ ----------
+    const allEvents = [
         { id: 'to-moscow-2026', title: 'To Moscow', date: '18.07.2026', type: 'Поездка', rawDate: '2026-07-18', icon: '🏙️', season: 'summer' },
         { id: 'vk-fest-2026', title: 'ВК ФЕСТ 2026', date: '19.07.2026', type: 'Фестиваль', rawDate: '2026-07-19', icon: '🎤', season: 'summer' },
         { id: 'molodezhnyy-den', title: 'Молодежный день', date: '27.06.2026', type: 'Фестиваль', rawDate: '2026-06-27', icon: '🎉', season: 'summer' },
@@ -505,7 +673,61 @@
         { id: 'rozgrysh-dr', title: 'Розыгрыш ДР', date: '28.02.2026', type: 'День рождения', rawDate: '2026-02-28', icon: '🎂', season: 'spring' }
     ];
 
-    // ---------- ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ----------
+    // ---------- НЕДОСТУПНЫЕ СЕЗОНЫ ----------
+    const disabledSeasons = ['winter'];
+
+    // ---------- МЕТАДАННЫЕ СЕЗОНОВ ----------
+    const seasonMeta = {
+        all: {
+            icon: '✨',
+            name: 'Все события',
+            hero: 'Дневник',
+            yearEmoji: '✨',
+            welcomeTitle: '✨ Все события 2026',
+            welcomeSub: 'Все самые яркие моменты года в одном месте'
+        },
+        spring: {
+            icon: '🌸',
+            name: 'Весна',
+            hero: 'Весна',
+            yearEmoji: '🌸',
+            welcomeTitle: '🌸 Весна — время пробуждения',
+            welcomeSub: 'Первые цветы, тёплый воздух и новые истории'
+        },
+        summer: {
+            icon: '☀️',
+            name: 'Лето',
+            hero: 'Лето',
+            yearEmoji: '☀️',
+            welcomeTitle: '☀️ Лето — время приключений',
+            welcomeSub: 'Солнце, пляж и незабываемые моменты'
+        },
+        autumn: {
+            icon: '🍁',
+            name: 'Осень',
+            hero: 'Осень',
+            yearEmoji: '🍁',
+            welcomeTitle: '🍁 Осень — время тёплых историй',
+            welcomeSub: 'Уютные вечера с чаем, прогулки в золоте листвы'
+        }
+    };
+
+    // ---------- ЭМОДЗИ ДЛЯ ФОНА ----------
+    const bgEmojiSets = {
+        all:    ['🍁','🍂','🌰','🍄','🎃','☕','🌧️','🍁','🍂','🌰','🍁','🕯️'],
+        spring: ['🌸','🌷','🌿','🌱','🦋','🐣','🌼','🍀','🌺','🌻','💐','🪴'],
+        summer: ['☀️','🌊','🍉','🏖️','🌴','🍦','🐚','🌺','🥥','🩴','🌞','🐬'],
+        autumn: ['🍁','🍂','🌰','🍄','🎃','☕','🌧️','🍁','🍂','🌰','🍁','🕯️']
+    };
+
+    const fallingEmojiSets = {
+        all:    ['🍁','🍂','🍁','🍂','🍁'],
+        spring: ['🌸','🌸','🌸','🌸','🌸'],
+        summer: ['✨','🌸','✨','🌸','✨'],
+        autumn: ['🍁','🍂','🍁','🍂','🍁']
+    };
+
+    // ---------- УТИЛИТЫ ----------
     function sortEvents(events) {
         return [...events].sort((a, b) => new Date(b.rawDate) - new Date(a.rawDate));
     }
@@ -523,40 +745,86 @@
         const parts = rawDate.split('-');
         const eventDate = new Date(Date.UTC(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2])));
         eventDate.setHours(0, 0, 0, 0);
-
         if (eventDate.getTime() === now.getTime()) return 'process';
         if (eventDate > now) return 'soon';
         return 'past';
     }
 
-    // ---------- DOM ЭЛЕМЕНТЫ ----------
+    function plural(n, one, few, many) {
+        const mod10 = n % 10;
+        const mod100 = n % 100;
+        if (mod10 === 1 && mod100 !== 11) return one;
+        if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) return few;
+        return many;
+    }
+
+    // ---------- DOM ----------
     const listEl = document.getElementById('eventList');
     const counterEl = document.getElementById('counter');
-    const scaleFill = document.getElementById('scaleFill');
-    const scaleTrack = document.getElementById('scaleTrack');
-    const scaleHandle = document.getElementById('scaleHandle');
-    const springLabel = document.getElementById('springLabel');
-    const summerLabel = document.getElementById('summerLabel');
-    const labelSpring = document.getElementById('labelSpring');
-    const labelSummer = document.getElementById('labelSummer');
-    const labelAll = document.getElementById('labelAll');
-    const seasonIndicator = document.getElementById('seasonIndicator');
+    const seasonIcon = document.getElementById('seasonIcon');
+    const seasonName = document.getElementById('seasonName');
+    const seasonYear = document.getElementById('seasonYear');
+    const heroTitle = document.getElementById('heroTitle');
+    const yearBox = document.getElementById('yearBox');
+    const welcomeTitle = document.getElementById('welcomeTitle');
+    const welcomeSub = document.getElementById('welcomeSub');
+    const footerNote = document.getElementById('footerNote');
 
-    const screen = document.getElementById('screen');
-    const cloudContainer = document.getElementById('cloudContainer');
+    let currentSeason = 'all';
 
-    let currentMode = 'all';
-    let currentValue = 0.5;
+    // ---------- ОБНОВЛЕНИЕ ФОНА ----------
+    function updateBackground(season) {
+        const bgEmojis = document.querySelectorAll('.bg-emoji');
+        const set = bgEmojiSets[season] || bgEmojiSets.all;
+        bgEmojis.forEach((el, i) => {
+            el.textContent = set[i] || '';
+        });
 
-    // ---------- РЕНДЕР ----------
-    function renderEvents(mode) {
-        let filtered = (mode === 'all') ? eventsData : eventsData.filter(e => e.season === mode);
+        const falling = document.querySelectorAll('.falling-leaf');
+        const fset = fallingEmojiSets[season] || fallingEmojiSets.all;
+        falling.forEach((el, i) => {
+            el.textContent = fset[i] || '✨';
+        });
+    }
+
+    // ---------- ОБНОВЛЕНИЕ ТЕМЫ ----------
+    function updateTheme(season) {
+        const meta = seasonMeta[season];
+        document.body.setAttribute('data-season', season);
+
+        heroTitle.textContent = meta.hero;
+        yearBox.textContent = `${meta.yearEmoji} 2026`;
+
+        welcomeTitle.textContent = meta.welcomeTitle;
+        welcomeSub.textContent = meta.welcomeSub;
+
+        seasonIcon.textContent = meta.icon;
+        seasonName.textContent = meta.name;
+
+        updateBackground(season);
+    }
+
+    // ---------- РЕНДЕР СОБЫТИЙ ----------
+    function renderEvents() {
+        let filtered = currentSeason === 'all'
+            ? allEvents
+            : allEvents.filter(e => e.season === currentSeason);
+
         const sorted = sortEvents(filtered);
-
         listEl.innerHTML = '';
+
+        counterEl.textContent = `${seasonMeta[currentSeason].icon} ${sorted.length} ${plural(sorted.length, 'событие', 'события', 'событий')}`;
+        seasonYear.textContent = `2026 · ${sorted.length} ${plural(sorted.length, 'запись', 'записи', 'записей')}`;
+
         if (sorted.length === 0) {
-            listEl.innerHTML = `<div style="text-align:center;color:#5A7D9A;font-size:14px;padding:30px 0;">Нет событий в этом сезоне</div>`;
-            counterEl.textContent = `🌿 0 событий`;
+            const empty = document.createElement('div');
+            empty.className = 'empty-state';
+            empty.innerHTML = `
+                <span class="empty-icon">${seasonMeta[currentSeason].icon}</span>
+                <div class="empty-title">Пока нет событий</div>
+                <div>Здесь появятся записи этого сезона</div>
+            `;
+            listEl.appendChild(empty);
             return;
         }
 
@@ -565,21 +833,14 @@
             let badgeText = 'ПРОШЛО';
             let badgeClass = 'past';
             if (status === 'soon') { badgeText = 'СКОРО'; badgeClass = 'soon'; }
-            else if (status === 'process') { badgeText = 'В ПРОЦЕССЕ'; badgeClass = 'process'; }
+            else if (status === 'process') { badgeText = 'СЕГОДНЯ'; badgeClass = 'process'; }
 
             const link = document.createElement('a');
             link.href = ev.id + '.html';
-            link.className = 'event-item-link show';
+            link.className = 'event-item-link';
 
             const item = document.createElement('div');
-            let cardClass = 'neutral-card';
-            if (mode === 'spring' || ev.season === 'spring') cardClass = 'spring-card';
-            if (mode === 'summer' || ev.season === 'summer') cardClass = 'summer-card';
-            if (mode === 'all') {
-                cardClass = ev.season === 'spring' ? 'spring-card' : 'summer-card';
-            }
-            item.className = `event-item ${cardClass}`;
-            item.style.transitionDelay = (index * 0.05) + 's';
+            item.className = 'event-item';
 
             item.innerHTML = `
                 <div class="event-icon">${ev.icon}</div>
@@ -592,103 +853,60 @@
 
             link.appendChild(item);
             listEl.appendChild(link);
+
+            setTimeout(() => link.classList.add('show'), index * 60);
         });
-
-        counterEl.textContent = `🌿 ${sorted.length} событий`;
     }
 
-    // ---------- ШКАЛА ----------
-    function updateScale(value) {
-        currentValue = Math.max(0, Math.min(1, value));
-        const percent = currentValue * 100;
-        scaleFill.style.width = percent + '%';
-        scaleHandle.style.left = percent + '%';
-
-        if (currentValue < 0.25) {
-            scaleHandle.className = 'scale-handle spring-handle';
-            scaleHandle.textContent = '🌸';
-            seasonIndicator.textContent = '🌸 Весна';
-            seasonIndicator.className = 'season-indicator active';
-            springLabel.classList.add('active');
-            summerLabel.classList.remove('active');
-            labelSpring.classList.add('active');
-            labelAll.classList.remove('active');
-            labelSummer.classList.remove('active');
-            currentMode = 'spring';
-        } else if (currentValue > 0.75) {
-            scaleHandle.className = 'scale-handle summer-handle';
-            scaleHandle.textContent = '☀️';
-            seasonIndicator.textContent = '☀️ Лето';
-            seasonIndicator.className = 'season-indicator active';
-            springLabel.classList.remove('active');
-            summerLabel.classList.add('active');
-            labelSpring.classList.remove('active');
-            labelAll.classList.remove('active');
-            labelSummer.classList.add('active');
-            currentMode = 'summer';
-        } else {
-            scaleHandle.className = 'scale-handle mixed-handle';
-            scaleHandle.textContent = '🌿';
-            seasonIndicator.textContent = '🌿 Все события';
-            seasonIndicator.className = 'season-indicator active';
-            springLabel.classList.remove('active');
-            summerLabel.classList.remove('active');
-            labelSpring.classList.remove('active');
-            labelAll.classList.add('active');
-            labelSummer.classList.remove('active');
-            currentMode = 'all';
-        }
-        renderEvents(currentMode);
+    // ---------- СЧЁТЧИКИ В ДРОПДАУНЕ ----------
+    function updateDropdownCounts() {
+        document.querySelectorAll('.stage-item').forEach(item => {
+            const season = item.dataset.season;
+            if (disabledSeasons.includes(season)) return; // Пропускаем недоступные
+            const count = season === 'all'
+                ? allEvents.length
+                : allEvents.filter(e => e.season === season).length;
+            const countEl = item.querySelector('[data-count]');
+            if (countEl) countEl.textContent = count;
+        });
     }
 
-    // ---------- ВЗАИМОДЕЙСТВИЕ СО ШКАЛОЙ ----------
-    let isDraggingScale = false;
-
-    function getScaleValue(clientX) {
-        const rect = scaleTrack.getBoundingClientRect();
-        const x = clientX - rect.left;
-        return Math.max(0, Math.min(1, x / rect.width));
+    // ---------- СМЕНА СЕЗОНА ----------
+    function switchSeason(season) {
+        if (disabledSeasons.includes(season)) return; // Защита от перехода
+        currentSeason = season;
+        updateTheme(season);
+        renderEvents();
     }
 
-    function onScaleStart(e) {
-        e.preventDefault();
-        isDraggingScale = true;
-        const clientX = e.type === 'touchstart' ? e.touches[0].clientX : e.clientX;
-        const value = getScaleValue(clientX);
-        updateScale(value);
-    }
+    // ---------- ДРОПДАУН ----------
+    const dropdown = document.getElementById('dropdownStages');
+    const dropdownBtn = document.getElementById('dropdownBtn');
 
-    function onScaleMove(e) {
-        if (!isDraggingScale) return;
-        e.preventDefault();
-        const clientX = e.type === 'touchmove' ? e.touches[0].clientX : e.clientX;
-        const value = getScaleValue(clientX);
-        updateScale(value);
-    }
+    dropdownBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('open');
+    });
+    document.addEventListener('click', (e) => {
+        if (dropdown && !dropdown.contains(e.target)) dropdown.classList.remove('open');
+    });
 
-    function onScaleEnd(e) {
-        if (!isDraggingScale) return;
-        isDraggingScale = false;
-        const target = currentValue < 0.25 ? 0 : (currentValue > 0.75 ? 1 : 0.5);
-        updateScale(target);
-    }
+    document.querySelectorAll('.stage-item').forEach(item => {
+        item.addEventListener('click', () => {
+            const season = item.dataset.season;
 
-    function onScaleClick(e) {
-        if (isDraggingScale) return;
-        const clientX = e.clientX;
-        const value = getScaleValue(clientX);
-        const target = value < 0.25 ? 0 : (value > 0.75 ? 1 : 0.5);
-        updateScale(target);
-    }
+            // Не даём кликать на недоступные сезоны
+            if (disabledSeasons.includes(season)) return;
 
-    scaleTrack.addEventListener('mousedown', onScaleStart);
-    document.addEventListener('mousemove', onScaleMove);
-    document.addEventListener('mouseup', onScaleEnd);
-    scaleTrack.addEventListener('touchstart', onScaleStart, { passive: false });
-    document.addEventListener('touchmove', onScaleMove, { passive: false });
-    document.addEventListener('touchend', onScaleEnd, { passive: false });
-    scaleTrack.addEventListener('click', onScaleClick);
+            document.querySelectorAll('.stage-item').forEach(i => i.classList.remove('active'));
+            item.classList.add('active');
+            dropdown.classList.remove('open');
+            switchSeason(season);
+        });
+    });
 
     // ---------- ИНИЦИАЛИЗАЦИЯ ----------
-    updateScale(0.5);
+    updateDropdownCounts();
+    updateTheme('all');
+    renderEvents();
 </script>
